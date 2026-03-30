@@ -1,0 +1,104 @@
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Menu, X, Truck, Phone } from 'lucide-react';
+import { cn } from '@/src/lib/utils';
+
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'About', path: '/about' },
+    { name: 'Services', path: '/services' },
+    { name: 'Get a Quote', path: '/quote' },
+    { name: 'Contact', path: '/contact' },
+  ];
+
+  const isHome = location.pathname === '/';
+  const isDarkText = scrolled || !isHome;
+
+  return (
+    <nav
+      className={cn(
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-4 py-3',
+        scrolled || !isHome ? 'bg-white shadow-md' : 'bg-transparent'
+      )}
+    >
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
+        <Link to="/" className="flex items-center gap-2 group">
+          <div className="bg-primary p-2 rounded-lg group-hover:bg-secondary transition-colors">
+            <Truck className="text-white w-6 h-6" />
+          </div>
+          <span className={cn(
+            "font-bold text-xl tracking-tight",
+            isDarkText ? "text-primary" : "text-white"
+          )}>
+            Krenium<span className="text-secondary">Resources</span>
+          </span>
+        </Link>
+
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center gap-8">
+          {navLinks.map((link) => (
+            <Link
+              key={link.path}
+              to={link.path}
+              className={cn(
+                'text-sm font-medium transition-colors hover:text-secondary',
+                isDarkText ? 'text-slate-700' : 'text-white',
+                location.pathname === link.path && 'text-secondary'
+              )}
+            >
+              {link.name}
+            </Link>
+          ))}
+        </div>
+
+        {/* Mobile Toggle */}
+        <button
+          className="md:hidden p-2"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {isOpen ? (
+            <X className={isDarkText ? 'text-primary' : 'text-white'} />
+          ) : (
+            <Menu className={isDarkText ? 'text-primary' : 'text-white'} />
+          )}
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      {isOpen && (
+        <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-xl border-t border-slate-100 animate-in slide-in-from-top duration-300">
+          <div className="flex flex-col p-4 gap-4">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={cn(
+                  'text-lg font-medium p-2 rounded-lg hover:bg-slate-50',
+                  location.pathname === link.path ? 'text-secondary' : 'text-slate-700'
+                )}
+                onClick={() => setIsOpen(false)}
+              >
+                {link.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+    </nav>
+  );
+};
+
+export default Navbar;
