@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { collection, addDoc } from 'firebase/firestore';
-import { db, auth } from '../firebase';
+import { supabase } from '../lib/supabase';
 import { 
   Calculator, 
   Truck, 
@@ -17,57 +16,6 @@ import {
   Shield,
   Loader2
 } from 'lucide-react';
-
-enum OperationType {
-  CREATE = 'create',
-  UPDATE = 'update',
-  DELETE = 'delete',
-  LIST = 'list',
-  GET = 'get',
-  WRITE = 'write',
-}
-
-interface FirestoreErrorInfo {
-  error: string;
-  operationType: OperationType;
-  path: string | null;
-  authInfo: {
-    userId: string | undefined;
-    email: string | null | undefined;
-    emailVerified: boolean | undefined;
-    isAnonymous: boolean | undefined;
-    tenantId: string | null | undefined;
-    providerInfo: {
-      providerId: string;
-      displayName: string | null;
-      email: string | null;
-      photoUrl: string | null;
-    }[];
-  }
-}
-
-function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
-  const errInfo: FirestoreErrorInfo = {
-    error: error instanceof Error ? error.message : String(error),
-    authInfo: {
-      userId: auth.currentUser?.uid,
-      email: auth.currentUser?.email,
-      emailVerified: auth.currentUser?.emailVerified,
-      isAnonymous: auth.currentUser?.isAnonymous,
-      tenantId: auth.currentUser?.tenantId,
-      providerInfo: auth.currentUser?.providerData.map(provider => ({
-        providerId: provider.providerId,
-        displayName: provider.displayName,
-        email: provider.email,
-        photoUrl: provider.photoURL
-      })) || []
-    },
-    operationType,
-    path
-  }
-  console.error('Firestore Error: ', JSON.stringify(errInfo));
-  throw new Error(JSON.stringify(errInfo));
-}
 
 const Quote = () => {
   const [activeTab, setActiveTab] = useState<'quote' | 'enquiry'>('quote');
@@ -102,16 +50,28 @@ const Quote = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    const path = 'quotes';
     try {
-      await addDoc(collection(db, path), {
-        ...quoteData,
-        status: 'pending',
-        createdAt: new Date().toISOString()
-      });
+      const { error } = await supabase.from('quotes').insert([
+        {
+          full_name: quoteData.fullName,
+          phone: quoteData.phone,
+          email: quoteData.email,
+          pickup: quoteData.pickup,
+          destination: quoteData.destination,
+          package_type: quoteData.packageType,
+          weight: quoteData.weight,
+          speed: quoteData.speed,
+          pickup_date: quoteData.pickupDate,
+          instructions: quoteData.instructions,
+          status: 'pending'
+        }
+      ]);
+
+      if (error) throw error;
       setSubmitted(true);
-    } catch (err) {
-      handleFirestoreError(err, OperationType.CREATE, path);
+    } catch (err: any) {
+      console.error('Supabase Error:', err);
+      setError(err.message || 'Failed to submit quote request');
     } finally {
       setLoading(false);
     }
@@ -121,16 +81,23 @@ const Quote = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    const path = 'enquiries';
     try {
-      await addDoc(collection(db, path), {
-        ...enquiryData,
-        status: 'new',
-        createdAt: new Date().toISOString()
-      });
+      const { error } = await supabase.from('enquiries').insert([
+        {
+          full_name: enquiryData.fullName,
+          email: enquiryData.email,
+          phone: enquiryData.phone,
+          subject: enquiryData.subject,
+          message: enquiryData.message,
+          status: 'new'
+        }
+      ]);
+
+      if (error) throw error;
       setSubmitted(true);
-    } catch (err) {
-      handleFirestoreError(err, OperationType.CREATE, path);
+    } catch (err: any) {
+      console.error('Supabase Error:', err);
+      setError(err.message || 'Failed to submit enquiry');
     } finally {
       setLoading(false);
     }
@@ -366,7 +333,7 @@ const Quote = () => {
                       <motion.div 
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="bg-orange-50 border border-orange-100 p-4 rounded-2xl flex items-center gap-3 text-orange-700"
+                        className="bg-slate-100 border border-slate-200 p-4 rounded-2xl flex items-center gap-3 text-slate-800"
                       >
                         <AlertCircle size={20} />
                         <span className="font-medium">Priority Handling: Your shipment will be processed with the highest priority for the fastest delivery.</span>
@@ -402,7 +369,7 @@ const Quote = () => {
                     <button 
                       disabled={loading}
                       type="submit" 
-                      className="w-full md:w-auto bg-secondary hover:bg-orange-600 text-white px-12 py-5 rounded-2xl font-bold text-xl transition-all shadow-xl flex items-center justify-center gap-3 disabled:opacity-50"
+                      className="w-full md:w-auto bg-secondary hover:bg-slate-800 text-white px-12 py-5 rounded-2xl font-bold text-xl transition-all shadow-xl flex items-center justify-center gap-3 disabled:opacity-50"
                     >
                       {loading ? <Loader2 className="animate-spin" size={20} /> : 'Submit Quote Request'} <Send size={20} />
                     </button>

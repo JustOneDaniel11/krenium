@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, addDoc, setDoc } from 'firebase/firestore';
-import { db, auth, storage } from '../firebase';
-import { signOut } from 'firebase/auth';
+import { supabase } from '../lib/supabase';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
@@ -29,12 +27,14 @@ import {
   Save,
   ExternalLink,
   Upload,
-  Loader2
+  Loader2,
+  Edit2,
+  Check,
+  X
 } from 'lucide-react';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState<'quotes' | 'enquiries' | 'content' | 'slider'>('quotes');
+  const [activeTab, setActiveTab] = useState<'quotes' | 'enquiries' | 'content' | 'slider' | 'settings'>('quotes');
   const [quotes, setQuotes] = useState<any[]>([]);
   const [enquiries, setEnquiries] = useState<any[]>([]);
   const [content, setContent] = useState<any[]>([]);
@@ -43,53 +43,83 @@ const AdminDashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
   const [isAddingSlider, setIsAddingSlider] = useState(false);
-  const [newSlider, setNewSlider] = useState({ url: '', title: '', order: 0 });
+  const [newSlider, setNewSlider] = useState({ url: '', title: '', caption: '', order: 0 });
+  const [isAddingContent, setIsAddingContent] = useState(false);
+  const [newContent, setNewContent] = useState({ key: '', section: 'General', type: 'text', label: '', text: '', url: '', alt: '' });
   const [uploading, setUploading] = useState<string | null>(null);
+  const [editingContentId, setEditingContentId] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState<{ text?: string, url?: string }>({});
   const [itemToDelete, setItemToDelete] = useState<{ id: string, collection: string } | null>(null);
   const navigate = useNavigate();
 
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const [
+        { data: quotesData },
+        { data: enquiriesData },
+        { data: contentData },
+        { data: sliderData }
+      ] = await Promise.all([
+        supabase.from('quotes').select('*').order('created_at', { ascending: false }),
+        supabase.from('enquiries').select('*').order('created_at', { ascending: false }),
+        supabase.from('content').select('*').order('section', { ascending: true }),
+        supabase.from('slider_images').select('*').order('order', { ascending: true })
+      ]);
+
+      if (quotesData) setQuotes(quotesData);
+      if (enquiriesData) setEnquiries(enquiriesData);
+      if (contentData) setContent(contentData);
+      if (sliderData) setSliderImages(sliderData);
+    } catch (error) {
+      console.error("Fetch Data Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const quotesQuery = query(collection(db, 'quotes'), orderBy('createdAt', 'desc'));
-    const enquiriesQuery = query(collection(db, 'enquiries'), orderBy('createdAt', 'desc'));
-    const contentQuery = query(collection(db, 'content'), orderBy('section', 'asc'));
-    const sliderQuery = query(collection(db, 'slider_images'), orderBy('order', 'asc'));
+    fetchData();
 
-    const unsubQuotes = onSnapshot(quotesQuery, (snapshot) => {
-      setQuotes(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-      setLoading(false);
-    }, (error) => {
-      console.error("Quotes Snapshot Error:", error);
-      setLoading(false);
-    });
+    // Set up real-time subscriptions with unique names to avoid collisions
+    const quotesSub = supabase.channel(`quotes_changes_${Math.random().toString(36).substring(2, 9)}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'quotes' }, fetchData)
+      .subscribe();
 
-    const unsubEnquiries = onSnapshot(enquiriesQuery, (snapshot) => {
-      setEnquiries(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-    }, (error) => console.error("Enquiries Snapshot Error:", error));
+    const enquiriesSub = supabase.channel(`enquiries_changes_${Math.random().toString(36).substring(2, 9)}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'enquiries' }, fetchData)
+      .subscribe();
 
-    const unsubContent = onSnapshot(contentQuery, (snapshot) => {
-      setContent(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-    }, (error) => console.error("Content Snapshot Error:", error));
+    const contentSub = supabase.channel(`content_changes_${Math.random().toString(36).substring(2, 9)}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'content' }, fetchData)
+      .subscribe();
 
-    const unsubSlider = onSnapshot(sliderQuery, (snapshot) => {
-      setSliderImages(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-    }, (error) => console.error("Slider Snapshot Error:", error));
+    const sliderSub = supabase.channel(`slider_changes_${Math.random().toString(36).substring(2, 9)}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'slider_images' }, fetchData)
+      .subscribe();
 
     return () => {
-      unsubQuotes();
-      unsubEnquiries();
-      unsubContent();
-      unsubSlider();
+      supabase.removeChannel(quotesSub);
+      supabase.removeChannel(enquiriesSub);
+      supabase.removeChannel(contentSub);
+      supabase.removeChannel(sliderSub);
     };
   }, []);
 
   const handleLogout = async () => {
-    await signOut(auth);
+    await supabase.auth.signOut();
     navigate('/admin/login');
   };
 
   const updateStatus = async (id: string, collectionName: string, newStatus: string) => {
     try {
-      await updateDoc(doc(db, collectionName, id), { status: newStatus });
+      const { error } = await supabase
+        .from(collectionName)
+        .update({ status: newStatus })
+        .eq('id', id);
+
+      if (error) throw error;
+
       if (selectedItem?.id === id) {
         setSelectedItem({ ...selectedItem, status: newStatus });
       }
@@ -101,9 +131,16 @@ const AdminDashboard = () => {
   const deleteItem = async () => {
     if (!itemToDelete) return;
     try {
-      await deleteDoc(doc(db, itemToDelete.collection, itemToDelete.id));
+      const { error } = await supabase
+        .from(itemToDelete.collection)
+        .delete()
+        .eq('id', itemToDelete.id);
+
+      if (error) throw error;
+
       setSelectedItem(null);
       setItemToDelete(null);
+      await fetchData();
     } catch (error) {
       console.error("Delete Error:", error);
     }
@@ -112,63 +149,136 @@ const AdminDashboard = () => {
   const handleUpdateContent = async (id: string, value: string, field: 'url' | 'text' = 'url') => {
     try {
       const updateData: any = { 
-        updatedAt: new Date().toISOString()
+        updated_at: new Date().toISOString()
       };
       updateData[field] = value;
-      await updateDoc(doc(db, 'content', id), updateData);
+      const { error } = await supabase
+        .from('content')
+        .update(updateData)
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchData();
     } catch (error) {
       console.error("Update Content Error:", error);
     }
   };
 
   const handleFileUpload = async (file: File, id: string, type: 'content' | 'slider') => {
+    console.log(`Starting upload for ${type}/${id}: ${file.name}`);
     setUploading(id);
     try {
-      const storageRef = ref(storage, `${type}/${id}_${Date.now()}_${file.name}`);
-      const uploadTask = uploadBytesResumable(storageRef, file);
+      const fileName = `${type}/${id}_${Date.now()}_${file.name}`;
+      
+      // Upload to 'images' bucket
+      const { data, error } = await supabase.storage
+        .from('images')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
 
-      return new Promise<string>((resolve, reject) => {
-        uploadTask.on('state_changed', 
-          null, 
-          (error) => {
-            console.error("Upload Error:", error);
-            setUploading(null);
-            reject(error);
-          }, 
-          async () => {
-            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            if (type === 'content') {
-              await handleUpdateContent(id, downloadURL);
-            } else if (type === 'slider' && id !== 'new') {
-              await updateDoc(doc(db, 'slider_images', id), { url: downloadURL });
-            }
-            setUploading(null);
-            resolve(downloadURL);
-          }
-        );
-      });
-    } catch (error) {
+      if (error) throw error;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('images')
+        .getPublicUrl(fileName);
+
+      console.log(`Supabase upload complete. Public URL: ${publicUrl}`);
+      
+      if (type === 'content') {
+        await handleUpdateContent(id, publicUrl);
+      } else if (type === 'slider' && id !== 'new') {
+        const { error: updateError } = await supabase
+          .from('slider_images')
+          .update({ url: publicUrl })
+          .eq('id', id);
+        if (updateError) throw updateError;
+      }
+      
+      setUploading(null);
+      return publicUrl;
+    } catch (error: any) {
       console.error("File Upload Error:", error);
       setUploading(null);
+      
+      let errorMessage = "Failed to upload image. Please check your connection and try again.";
+      if (error.message?.includes('bucket not found')) {
+        errorMessage = "Supabase Bucket 'images' not found. Please create a public bucket named 'images' in your Supabase project.";
+      } else {
+        errorMessage = `Upload error: ${error.message}`;
+      }
+      
+      alert(errorMessage);
       throw error;
     }
   };
 
   const handleAddSlider = async () => {
+    if (!newSlider.url) {
+      alert("Please upload an image or provide a URL first.");
+      return;
+    }
     try {
-      await addDoc(collection(db, 'slider_images'), {
-        ...newSlider,
-        active: true
-      });
+      const { error } = await supabase
+        .from('slider_images')
+        .insert([{
+          ...newSlider,
+          active: true
+        }]);
+
+      if (error) throw error;
+
       setIsAddingSlider(false);
-      setNewSlider({ url: '', title: '', order: sliderImages.length });
-    } catch (error) {
+      setNewSlider({ url: '', title: '', caption: '', order: sliderImages.length + 1 });
+      await fetchData();
+    } catch (error: any) {
       console.error("Add Slider Error:", error);
+      alert(`Failed to add slider image: ${error.message || 'Unknown error'}`);
     }
   };
 
+  const handleAddContent = async () => {
+    if (!newContent.key || !newContent.section || !newContent.type) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+    try {
+      const { error } = await supabase
+        .from('content')
+        .insert([{
+          id: newContent.key,
+          key: newContent.key,
+          section: newContent.section,
+          type: newContent.type,
+          label: newContent.label,
+          text: newContent.type === 'text' ? newContent.text : null,
+          url: newContent.type === 'image' ? newContent.url : null,
+          alt: newContent.type === 'image' ? newContent.alt : null,
+        }]);
+
+      if (error) throw error;
+
+      setIsAddingContent(false);
+      setNewContent({ key: '', section: 'General', type: 'text', label: '', text: '', url: '', alt: '' });
+      await fetchData();
+    } catch (error: any) {
+      console.error("Add Content Error:", error);
+      alert(`Failed to add content: ${error.message || 'Unknown error'}`);
+    }
+  };
+
+  const [isSeeding, setIsSeeding] = useState(false);
+
   const seedInitialContent = async () => {
+    setIsSeeding(true);
     const initialContent = [
+      { key: 'site_logo', url: '', alt: 'Krenium Logo', section: 'General', type: 'image', label: 'Site Logo' },
+      { key: 'site_name', text: 'Krenium', section: 'General', type: 'text', label: 'Site Name' },
+      { key: 'contact_email', text: 'hello@krenium.com', section: 'General', type: 'text', label: 'Contact Email' },
+      { key: 'contact_phone', text: '+234 800 000 0000', section: 'General', type: 'text', label: 'Contact Phone' },
+      { key: 'address', text: 'Lagos, Nigeria', section: 'General', type: 'text', label: 'Address' },
       { key: 'hero_bg', url: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80', alt: 'Logistics Warehouse', section: 'Home', type: 'image' },
       { key: 'about_story', url: 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80', alt: 'Our Story', section: 'About', type: 'image' },
       { key: 'founder_image', url: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80', alt: 'Founder', section: 'About', type: 'image' },
@@ -186,21 +296,35 @@ const AdminDashboard = () => {
     ];
 
     const initialSlider = [
-      { url: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80', title: 'Lagos Distribution Center', order: 0, active: true },
-      { url: 'https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&q=80', title: 'Abuja Logistics Hub', order: 1, active: true },
-      { url: 'https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?auto=format&fit=crop&q=80', title: 'Port Harcourt Port Operations', order: 2, active: true }
+      { url: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80', title: 'Lagos Distribution Center', caption: 'Connecting businesses across Nigeria.', order: 0, active: true },
+      { url: 'https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&q=80', title: 'Abuja Logistics Hub', caption: 'Secure storage and rapid dispatch.', order: 1, active: true },
+      { url: 'https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?auto=format&fit=crop&q=80', title: 'Port Harcourt Port Operations', caption: 'Expert handling and strategic coordination.', order: 2, active: true }
     ];
 
     try {
-      for (const item of initialContent) {
-        await setDoc(doc(db, 'content', item.key), { ...item, updatedAt: new Date().toISOString() });
+      // Upsert content
+      const { error: contentError } = await supabase
+        .from('content')
+        .upsert(initialContent.map(item => ({ ...item, id: item.key, updated_at: new Date().toISOString() })));
+      
+      if (contentError) throw contentError;
+
+      // Only insert slider images if there are none, to prevent duplicates
+      if (sliderImages.length === 0) {
+        const { error: sliderError } = await supabase
+          .from('slider_images')
+          .insert(initialSlider);
+
+        if (sliderError) throw sliderError;
       }
-      for (const item of initialSlider) {
-        await addDoc(collection(db, 'slider_images'), item);
-      }
-      console.log('Initial content seeded successfully!');
-    } catch (error) {
+
+      await fetchData();
+      alert('Initial content seeded successfully!');
+    } catch (error: any) {
       console.error("Seed Error:", error);
+      alert(`Error seeding content: ${error.message || 'Unknown error'}`);
+    } finally {
+      setIsSeeding(false);
     }
   };
 
@@ -269,6 +393,12 @@ const AdminDashboard = () => {
           >
             <ImageIcon size={20} /> Operations Slider
           </button>
+          <button 
+            onClick={() => setActiveTab('settings')}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === 'settings' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-500 hover:bg-slate-50'}`}
+          >
+            <Settings size={20} /> Settings
+          </button>
         </nav>
 
         <div className="mt-auto pt-8 border-t border-slate-100">
@@ -288,12 +418,14 @@ const AdminDashboard = () => {
             <h1 className="text-3xl font-bold text-primary mb-2">
               {activeTab === 'quotes' ? 'Shipping Quotes' : 
                activeTab === 'enquiries' ? 'General Enquiries' :
-               activeTab === 'content' ? 'Site Content Management' : 'Operations Slider'}
+               activeTab === 'content' ? 'Site Content Management' : 
+               activeTab === 'settings' ? 'Site Settings' : 'Operations Slider'}
             </h1>
             <p className="text-slate-500">
               {activeTab === 'quotes' ? 'Manage and respond to incoming requests from Nigeria.' :
                activeTab === 'enquiries' ? 'Respond to customer questions and support requests.' :
-               activeTab === 'content' ? 'Update images and assets across the frontend.' : 'Manage the images shown in the operations slider.'}
+               activeTab === 'content' ? 'Update images and assets across the frontend.' : 
+               activeTab === 'settings' ? 'Manage site logo and global configurations.' : 'Manage the images shown in the operations slider.'}
             </p>
           </div>
 
@@ -318,6 +450,15 @@ const AdminDashboard = () => {
               <Plus size={20} /> Add Slider Image
             </button>
           )}
+
+          {activeTab === 'content' && (
+            <button 
+              onClick={() => setIsAddingContent(true)}
+              className="bg-primary text-white px-6 py-3 rounded-2xl font-bold flex items-center gap-2 shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all"
+            >
+              <Plus size={20} /> Add Content
+            </button>
+          )}
         </header>
 
         {/* Data Table / List */}
@@ -329,18 +470,66 @@ const AdminDashboard = () => {
                   <div key={asset.id} className="bg-slate-50 rounded-3xl p-6 border border-slate-100 flex flex-col gap-4">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">{asset.section}</span>
-                      <span className="text-[10px] text-slate-300">Key: {asset.key}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] text-slate-300">Key: {asset.key}</span>
+                        {editingContentId === asset.id ? (
+                          <>
+                            <button 
+                              onClick={() => {
+                                if (asset.type === 'text') handleUpdateContent(asset.id, editForm.text || '', 'text');
+                                else handleUpdateContent(asset.id, editForm.url || '', 'url');
+                                setEditingContentId(null);
+                              }}
+                              className="text-green-500 hover:text-green-600 transition-colors"
+                              title="Save"
+                            >
+                              <Check size={16} />
+                            </button>
+                            <button 
+                              onClick={() => setEditingContentId(null)}
+                              className="text-slate-400 hover:text-slate-600 transition-colors"
+                              title="Cancel"
+                            >
+                              <X size={16} />
+                            </button>
+                          </>
+                        ) : (
+                          <button 
+                            onClick={() => {
+                              setEditingContentId(asset.id);
+                              setEditForm({ text: asset.text, url: asset.url });
+                            }}
+                            className="text-blue-400 hover:text-blue-600 transition-colors"
+                            title="Edit"
+                          >
+                            <Edit2 size={16} />
+                          </button>
+                        )}
+                        <button 
+                          onClick={() => setItemToDelete({ id: asset.id, collection: 'content' })}
+                          className="text-red-400 hover:text-red-600 transition-colors"
+                          title="Delete"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
                     </div>
                     
                     {asset.type === 'text' ? (
                       <div className="space-y-2">
                         <label className="text-xs font-bold text-slate-700">{asset.label || 'Text Content'}</label>
-                        <textarea 
-                          defaultValue={asset.text}
-                          onBlur={(e) => handleUpdateContent(asset.id, e.target.value, 'text')}
-                          rows={4}
-                          className="w-full p-4 rounded-2xl bg-white border border-slate-200 text-sm focus:ring-2 focus:ring-primary/20 transition-all resize-none"
-                        />
+                        {editingContentId === asset.id ? (
+                          <textarea 
+                            value={editForm.text || ''}
+                            onChange={(e) => setEditForm({ ...editForm, text: e.target.value })}
+                            rows={4}
+                            className="w-full p-4 rounded-2xl bg-white border border-slate-200 text-sm focus:ring-2 focus:ring-primary/20 transition-all resize-none"
+                          />
+                        ) : (
+                          <div className="w-full p-4 rounded-2xl bg-white border border-slate-200 text-sm min-h-[100px] whitespace-pre-wrap text-slate-600">
+                            {asset.text}
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <>
@@ -352,43 +541,48 @@ const AdminDashboard = () => {
                             </a>
                           </div>
                         </div>
-                        <div className="space-y-2">
-                          <label className="text-xs font-bold text-slate-700">Image Asset</label>
-                          <div className="flex flex-col gap-2">
-                            <div className="relative">
-                              <input 
-                                type="file" 
-                                className="hidden" 
-                                id={`file-${asset.id}`}
-                                accept="image/*"
-                                onChange={(e) => {
-                                  const file = e.target.files?.[0];
-                                  if (file) handleFileUpload(file, asset.id, 'content');
-                                }}
-                              />
-                              <label 
-                                htmlFor={`file-${asset.id}`}
-                                className="flex items-center justify-center gap-2 w-full p-3 rounded-xl border-2 border-dashed border-slate-200 hover:border-primary hover:bg-primary/5 cursor-pointer transition-all text-sm font-medium text-slate-600"
-                              >
-                                {uploading === asset.id ? (
-                                  <Loader2 className="animate-spin text-primary" size={18} />
-                                ) : (
-                                  <Upload size={18} className="text-slate-400" />
-                                )}
-                                {uploading === asset.id ? 'Uploading...' : 'Upload Local Image'}
-                              </label>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <span className="text-[10px] text-slate-400 uppercase font-bold">OR URL:</span>
-                              <input 
-                                type="text" 
-                                defaultValue={asset.url}
-                                onBlur={(e) => handleUpdateContent(asset.id, e.target.value, 'url')}
-                                className="flex-grow p-2 rounded-lg border border-slate-200 text-xs focus:ring-2 focus:ring-primary/20 transition-all"
-                              />
+                        {editingContentId === asset.id && (
+                          <div className="space-y-2">
+                            <label className="text-xs font-bold text-slate-700">Image Asset</label>
+                            <div className="flex flex-col gap-2">
+                              <div className="relative">
+                                <input 
+                                  type="file" 
+                                  className="hidden" 
+                                  id={`file-${asset.id}`}
+                                  accept="image/*"
+                                  onChange={async (e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) {
+                                      const url = await handleFileUpload(file, asset.id, 'content');
+                                      if (url) setEditForm(prev => ({ ...prev, url }));
+                                    }
+                                  }}
+                                />
+                                <label 
+                                  htmlFor={`file-${asset.id}`}
+                                  className="flex items-center justify-center gap-2 w-full p-3 rounded-xl border-2 border-dashed border-slate-200 hover:border-primary hover:bg-primary/5 cursor-pointer transition-all text-sm font-medium text-slate-600"
+                                >
+                                  {uploading === asset.id ? (
+                                    <Loader2 className="animate-spin text-primary" size={18} />
+                                  ) : (
+                                    <Upload size={18} className="text-slate-400" />
+                                  )}
+                                  {uploading === asset.id ? 'Uploading...' : 'Upload Local Image'}
+                                </label>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-[10px] text-slate-400 uppercase font-bold">OR URL:</span>
+                                <input 
+                                  type="text" 
+                                  value={editForm.url || ''}
+                                  onChange={(e) => setEditForm({ ...editForm, url: e.target.value })}
+                                  className="flex-grow p-2 rounded-lg border border-slate-200 text-xs focus:ring-2 focus:ring-primary/20 transition-all"
+                                />
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        )}
                       </>
                     )}
                   </div>
@@ -399,9 +593,10 @@ const AdminDashboard = () => {
                     <p>No content assets found. They will appear here once seeded or added.</p>
                     <button 
                       onClick={seedInitialContent}
-                      className="bg-primary text-white px-6 py-2 rounded-xl font-bold mt-4"
+                      disabled={isSeeding}
+                      className="bg-primary text-white px-6 py-2 rounded-xl font-bold mt-4 disabled:opacity-50"
                     >
-                      Seed Initial Content
+                      {isSeeding ? 'Seeding...' : 'Seed Initial Content'}
                     </button>
                   </div>
                 )}
@@ -426,6 +621,7 @@ const AdminDashboard = () => {
                     </div>
                     <div className="space-y-2">
                       <p className="font-bold text-primary">{img.title}</p>
+                      {img.caption && <p className="text-sm text-slate-500">{img.caption}</p>}
                       <div className="flex items-center gap-2">
                         <input 
                           type="file" 
@@ -458,6 +654,138 @@ const AdminDashboard = () => {
                     <p>No slider images found. Add one to get started.</p>
                   </div>
                 )}
+              </div>
+            </div>
+          ) : activeTab === 'settings' ? (
+            <div className="p-8 space-y-8 overflow-y-auto">
+              <div className="max-w-3xl mx-auto space-y-8">
+                <div className="bg-slate-50 rounded-3xl p-8 border border-slate-100">
+                  <h3 className="text-xl font-bold text-slate-800 mb-6">Global Site Settings</h3>
+                  <p className="text-slate-500 mb-8">
+                    Update your site's core identity and contact information here. These changes will reflect globally across the website.
+                  </p>
+                  
+                  <div className="space-y-6">
+                    {content.filter(c => ['site_logo', 'site_name', 'contact_email', 'contact_phone', 'address'].includes(c.key)).map(asset => (
+                      <div key={asset.id} className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <label className="text-sm font-bold text-slate-700 capitalize">
+                            {asset.key.replace('_', ' ')}
+                          </label>
+                          {editingContentId === asset.id ? (
+                            <div className="flex items-center gap-2">
+                              <button 
+                                onClick={() => {
+                                  if (asset.type === 'text') handleUpdateContent(asset.id, editForm.text || '', 'text');
+                                  else handleUpdateContent(asset.id, editForm.url || '', 'url');
+                                  setEditingContentId(null);
+                                }}
+                                className="text-green-500 hover:text-green-600 transition-colors"
+                                title="Save"
+                              >
+                                <Check size={16} />
+                              </button>
+                              <button 
+                                onClick={() => setEditingContentId(null)}
+                                className="text-slate-400 hover:text-slate-600 transition-colors"
+                                title="Cancel"
+                              >
+                                <X size={16} />
+                              </button>
+                            </div>
+                          ) : (
+                            <button 
+                              onClick={() => {
+                                setEditingContentId(asset.id);
+                                setEditForm({ text: asset.text, url: asset.url });
+                              }}
+                              className="text-blue-400 hover:text-blue-600 transition-colors"
+                              title="Edit"
+                            >
+                              <Edit2 size={16} />
+                            </button>
+                          )}
+                        </div>
+                        {asset.type === 'text' ? (
+                          editingContentId === asset.id ? (
+                            <input 
+                              type="text"
+                              value={editForm.text || ''}
+                              onChange={(e) => setEditForm({ ...editForm, text: e.target.value })}
+                              className="w-full p-4 rounded-2xl bg-white border border-slate-200 focus:ring-2 focus:ring-primary/20 transition-all"
+                            />
+                          ) : (
+                            <div className="w-full p-4 rounded-2xl bg-white border border-slate-200 text-slate-600">
+                              {asset.text || 'Not set'}
+                            </div>
+                          )
+                        ) : (
+                          <div className="flex items-center gap-6">
+                            {asset.url && (
+                              <div className="w-24 h-24 rounded-xl overflow-hidden border border-slate-200 bg-white flex-shrink-0">
+                                <img src={asset.url} alt={asset.alt} className="w-full h-full object-contain p-2" />
+                              </div>
+                            )}
+                            {editingContentId === asset.id && (
+                              <div className="flex-grow space-y-2">
+                                <div className="relative">
+                                  <input 
+                                    type="file" 
+                                    className="hidden" 
+                                    id={`settings-upload-${asset.id}`}
+                                    accept="image/*"
+                                    onChange={async (e) => {
+                                      const file = e.target.files?.[0];
+                                      if (file) {
+                                        const url = await handleFileUpload(file, asset.id, 'content');
+                                        if (url) setEditForm(prev => ({ ...prev, url }));
+                                      }
+                                    }}
+                                  />
+                                  <label 
+                                    htmlFor={`settings-upload-${asset.id}`}
+                                    className="flex items-center justify-center gap-2 w-full p-4 rounded-2xl border-2 border-dashed border-slate-200 hover:border-primary hover:bg-primary/5 cursor-pointer transition-all text-sm font-medium text-slate-600 bg-white"
+                                  >
+                                    {uploading === asset.id ? (
+                                      <Loader2 className="animate-spin text-primary" size={20} />
+                                    ) : (
+                                      <Upload size={20} className="text-slate-400" />
+                                    )}
+                                    {uploading === asset.id ? 'Uploading...' : 'Upload New Logo'}
+                                  </label>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs text-slate-400 uppercase font-bold">OR URL:</span>
+                                  <input 
+                                    type="text" 
+                                    value={editForm.url || ''}
+                                    onChange={(e) => setEditForm({ ...editForm, url: e.target.value })}
+                                    className="flex-grow p-3 rounded-xl bg-white border border-slate-200 focus:ring-2 focus:ring-primary/20 transition-all text-sm" 
+                                    placeholder="https://..." 
+                                  />
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                    
+                    {/* If some settings are missing, show a message */}
+                    {content.filter(c => ['site_logo', 'site_name', 'contact_email', 'contact_phone', 'address'].includes(c.key)).length === 0 && (
+                      <div className="text-center p-8 bg-white rounded-2xl border border-slate-200">
+                        <p className="text-slate-500 mb-4">Core settings keys not found.</p>
+                        <button 
+                          onClick={seedInitialContent}
+                          disabled={isSeeding}
+                          className="text-primary font-bold hover:underline disabled:opacity-50"
+                        >
+                          {isSeeding ? 'Seeding...' : 'Seed Initial Content to generate them'}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           ) : (
@@ -670,6 +998,12 @@ const AdminDashboard = () => {
               <h2 className="text-2xl font-bold text-primary mb-8">Add Slider Image</h2>
               
               <div className="space-y-6">
+                {newSlider.url && (
+                  <div className="aspect-video rounded-2xl overflow-hidden border border-slate-200 bg-slate-50">
+                    <img src={newSlider.url} alt="Preview" className="w-full h-full object-cover" />
+                  </div>
+                )}
+                
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Image Source</label>
                   <div className="flex flex-col gap-4">
@@ -712,13 +1046,23 @@ const AdminDashboard = () => {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Title / Caption</label>
+                  <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Title</label>
                   <input 
                     type="text" 
                     value={newSlider.title}
                     onChange={(e) => setNewSlider({...newSlider, title: e.target.value})}
                     className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-primary/20 transition-all" 
                     placeholder="Lagos Logistics Hub" 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Caption</label>
+                  <input 
+                    type="text" 
+                    value={newSlider.caption}
+                    onChange={(e) => setNewSlider({...newSlider, caption: e.target.value})}
+                    className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-primary/20 transition-all" 
+                    placeholder="Connecting businesses across Nigeria." 
                   />
                 </div>
                 <div className="space-y-2">
@@ -733,9 +1077,120 @@ const AdminDashboard = () => {
 
                 <button 
                   onClick={handleAddSlider}
+                  disabled={uploading === 'new' || !newSlider.url}
+                  className="w-full bg-primary text-white py-4 rounded-2xl font-bold text-lg shadow-xl shadow-primary/20 hover:bg-primary/90 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {uploading === 'new' ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />} Save Image
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Add Content Modal */}
+      <AnimatePresence>
+        {isAddingContent && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="bg-white rounded-[2.5rem] shadow-2xl max-w-lg w-full p-10 relative max-h-[90vh] overflow-y-auto"
+            >
+              <button 
+                onClick={() => setIsAddingContent(false)}
+                className="absolute top-6 right-6 p-2 hover:bg-slate-100 rounded-full transition-all"
+              >
+                <XCircle size={24} className="text-slate-400" />
+              </button>
+
+              <h2 className="text-2xl font-bold text-primary mb-8">Add Content</h2>
+              
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Key (Unique ID)</label>
+                  <input 
+                    type="text" 
+                    value={newContent.key}
+                    onChange={(e) => setNewContent({...newContent, key: e.target.value})}
+                    className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-primary/20 transition-all" 
+                    placeholder="e.g., hero_title" 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Section</label>
+                  <input 
+                    type="text" 
+                    value={newContent.section}
+                    onChange={(e) => setNewContent({...newContent, section: e.target.value})}
+                    className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-primary/20 transition-all" 
+                    placeholder="e.g., Home, About, General" 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Label (Display Name)</label>
+                  <input 
+                    type="text" 
+                    value={newContent.label}
+                    onChange={(e) => setNewContent({...newContent, label: e.target.value})}
+                    className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-primary/20 transition-all" 
+                    placeholder="e.g., Hero Title" 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Type</label>
+                  <select 
+                    value={newContent.type}
+                    onChange={(e) => setNewContent({...newContent, type: e.target.value})}
+                    className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-primary/20 transition-all"
+                  >
+                    <option value="text">Text</option>
+                    <option value="image">Image</option>
+                  </select>
+                </div>
+
+                {newContent.type === 'text' ? (
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Text Content</label>
+                    <textarea 
+                      value={newContent.text}
+                      onChange={(e) => setNewContent({...newContent, text: e.target.value})}
+                      rows={4}
+                      className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-primary/20 transition-all resize-none" 
+                      placeholder="Enter text content..." 
+                    />
+                  </div>
+                ) : (
+                  <>
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Image URL</label>
+                      <input 
+                        type="text" 
+                        value={newContent.url}
+                        onChange={(e) => setNewContent({...newContent, url: e.target.value})}
+                        className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-primary/20 transition-all" 
+                        placeholder="https://..." 
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Alt Text</label>
+                      <input 
+                        type="text" 
+                        value={newContent.alt}
+                        onChange={(e) => setNewContent({...newContent, alt: e.target.value})}
+                        className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-primary/20 transition-all" 
+                        placeholder="Image description..." 
+                      />
+                    </div>
+                  </>
+                )}
+
+                <button 
+                  onClick={handleAddContent}
                   className="w-full bg-primary text-white py-4 rounded-2xl font-bold text-lg shadow-xl shadow-primary/20 hover:bg-primary/90 transition-all flex items-center justify-center gap-2"
                 >
-                  <Save size={20} /> Save Image
+                  <Save size={20} /> Save Content
                 </button>
               </div>
             </motion.div>

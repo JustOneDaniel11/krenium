@@ -38,14 +38,14 @@ const Home = () => {
               Fast & Reliable Logistics
             </span>
             <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
-              Moving Your Business <span className="text-secondary">Across Nigeria</span>
+              Moving Your Business <span className="text-blue-200">Across Nigeria</span>
             </h1>
             <p className="text-xl text-slate-200 mb-10 leading-relaxed">
               Fast and secure deliveries within Nigeria. 
               We provide secure, efficient, and transparent logistics solutions for businesses and individuals.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/quote" className="bg-secondary hover:bg-orange-600 text-white px-10 py-4 rounded-lg font-bold text-lg transition-all shadow-xl">
+              <Link to="/quote" className="bg-secondary hover:bg-slate-800 text-white px-10 py-4 rounded-lg font-bold text-lg transition-all shadow-xl">
                 Get a Quote
               </Link>
             </div>
@@ -53,8 +53,36 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Process Section */}
+      <section className="py-24 px-4 bg-slate-50 relative z-20 -mt-10 max-w-7xl mx-auto w-full rounded-2xl shadow-sm border border-slate-100">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-primary text-sm font-bold uppercase tracking-widest mb-4">How It Works</h2>
+            <h3 className="text-4xl font-bold text-slate-900">Our Simple Delivery Process</h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
+            <div className="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-primary/10 -z-10"></div>
+            {[
+              { step: '01', title: 'Request Quote', desc: 'Fill our simple form or call us for a custom quote.' },
+              { step: '02', title: 'Pickup', desc: 'We pick up your items from your location or you drop off.' },
+              { step: '03', title: 'Transit', desc: 'Your shipment moves securely through our network.' },
+              { step: '04', title: 'Delivery', desc: 'Safe and timely delivery to the final destination.' },
+            ].map((item, i) => (
+              <div key={i} className="bg-white p-8 rounded-2xl shadow-lg text-center border border-slate-100">
+                <div className="w-12 h-12 bg-secondary text-white rounded-full flex items-center justify-center font-bold mx-auto mb-6 text-xl">
+                  {item.step}
+                </div>
+                <h4 className="text-xl font-bold text-primary mb-4">{item.title}</h4>
+                <p className="text-slate-500 text-sm">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Stats Section */}
-      <section className="bg-white py-12 shadow-sm relative z-20 -mt-10 max-w-6xl mx-auto w-full rounded-2xl grid grid-cols-1 md:grid-cols-3 gap-8 px-8 border border-slate-100">
+      <section className="bg-white py-12 shadow-sm relative z-20 max-w-6xl mx-auto w-full rounded-2xl grid grid-cols-1 md:grid-cols-3 gap-8 px-8 border border-slate-100 mt-16">
         {[
           { icon: <Truck className="text-secondary" />, label: 'Daily Deliveries', value: '10k+' },
           { icon: <Users className="text-secondary" />, label: 'Happy Clients', value: '25k+' },
@@ -69,9 +97,9 @@ const Home = () => {
       </section>
 
       {/* Trusted Brands Section */}
-      <section className="py-16 bg-slate-50 border-y border-slate-100 overflow-hidden">
+      <section className="py-16 bg-primary overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 mb-10">
-          <p className="text-center text-slate-400 text-sm font-bold uppercase tracking-widest">Trusted by Industry Leaders</p>
+          <p className="text-center text-blue-200 text-sm font-bold uppercase tracking-widest">Trusted by Industry Leaders</p>
         </div>
         <div className="relative flex overflow-x-hidden">
           <motion.div 
@@ -81,13 +109,13 @@ const Home = () => {
               ease: "linear",
               repeat: Infinity,
             }}
-            className="flex whitespace-nowrap gap-12 md:gap-20 opacity-50 grayscale hover:grayscale-0 transition-all duration-500 py-4"
+            className="flex whitespace-nowrap gap-12 md:gap-20 transition-all duration-500 py-4"
           >
             {[
               'UBA', 'Heritage Bank', 'Big Brother Naija', 'The Voice Nigeria', 'Goonite', 'Multichoice',
               'UBA', 'Heritage Bank', 'Big Brother Naija', 'The Voice Nigeria', 'Goonite', 'Multichoice'
             ].map((brand, i) => (
-              <div key={`${brand}-${i}`} className="text-2xl md:text-3xl font-black text-primary/40 hover:text-primary transition-colors cursor-default select-none px-4">
+              <div key={`${brand}-${i}`} className="text-2xl md:text-3xl font-black text-white/70 hover:text-white transition-colors cursor-default select-none px-4">
                 {brand}
               </div>
             ))}
@@ -146,7 +174,7 @@ const Home = () => {
         <div className="absolute top-0 right-0 w-1/3 h-full bg-secondary/10 -skew-x-12 transform translate-x-1/2"></div>
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16 relative z-10">
           <div className="lg:w-1/2">
-            <h2 className="text-secondary text-sm font-bold uppercase tracking-widest mb-4">Why Choose Us</h2>
+            <h2 className="text-blue-200 text-sm font-bold uppercase tracking-widest mb-4">Why Choose Us</h2>
             <h3 className="text-4xl md:text-5xl font-bold mb-8">The Most Trusted Logistics Partner in Nigeria</h3>
             <p className="text-slate-300 text-lg mb-12 leading-relaxed">
               We combine local expertise with high standards to ensure your shipments are handled with the highest level of professionalism and care.
@@ -154,8 +182,8 @@ const Home = () => {
             
             <div className="space-y-8">
               {[
-                { title: 'Fast Delivery', desc: 'Get your items delivered quickly across all major Nigerian cities.', icon: <Zap className="text-secondary" /> },
-                { title: 'Secure Handling', desc: 'Your items are insured and handled by trained professionals to ensure zero damage.', icon: <Shield className="text-secondary" /> },
+                { title: 'Fast Delivery', desc: 'Get your items delivered quickly across all major Nigerian cities.', icon: <Zap className="text-white" /> },
+                { title: 'Secure Handling', desc: 'Your items are insured and handled by trained professionals to ensure zero damage.', icon: <Shield className="text-white" /> },
               ].map((item, i) => (
                 <div key={i} className="flex gap-6">
                   <div className="bg-white/10 p-3 rounded-xl h-fit">{item.icon}</div>
@@ -196,7 +224,7 @@ const Home = () => {
             </div>
             <div>
               <h3 className="text-3xl font-bold mb-2">Get a Quote</h3>
-              <p className="text-slate-500 group-hover:text-orange-100">Request a free estimate for your shipping.</p>
+              <p className="text-slate-500 group-hover:text-slate-300">Request a free estimate for your shipping.</p>
             </div>
           </Link>
         </div>

@@ -38,7 +38,7 @@ const OperationsSlider = () => {
   const operations = images.length > 0 ? images.map(img => ({
     url: img.url,
     title: img.title,
-    caption: img.title // Using title as caption if not separate
+    caption: img.caption || img.title // Using title as fallback if caption is empty
   })) : defaultOperations;
 
   useEffect(() => {
@@ -69,6 +69,13 @@ const OperationsSlider = () => {
         </div>
 
         <div className="relative h-[400px] md:h-[600px] rounded-3xl overflow-hidden shadow-2xl group">
+          {/* Preload all images to prevent slow loading on slide change */}
+          <div className="hidden">
+            {operations.map((op, i) => (
+              <img key={i} src={op.url} alt="preload" />
+            ))}
+          </div>
+
           <AnimatePresence mode="wait">
             <motion.div
               key={currentIndex}
@@ -83,6 +90,8 @@ const OperationsSlider = () => {
                 alt={operations[currentIndex].title}
                 className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"
+                loading="eager"
+                fetchPriority="high"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent"></div>
               
@@ -92,7 +101,7 @@ const OperationsSlider = () => {
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.3 }}
                 >
-                  <h4 className="text-secondary font-bold uppercase tracking-wider mb-2">{operations[currentIndex].title}</h4>
+                  <h4 className="text-blue-200 font-bold uppercase tracking-wider mb-2">{operations[currentIndex].title}</h4>
                   <p className="text-2xl md:text-4xl font-bold mb-4">{operations[currentIndex].caption}</p>
                 </motion.div>
               </div>
@@ -120,7 +129,7 @@ const OperationsSlider = () => {
                 key={i}
                 onClick={() => setCurrentIndex(i)}
                 className={`w-2 h-2 rounded-full transition-all ${
-                  i === currentIndex ? 'bg-secondary w-8' : 'bg-white/50'
+                  i === currentIndex ? 'bg-white w-8' : 'bg-white/50'
                 }`}
               />
             ))}

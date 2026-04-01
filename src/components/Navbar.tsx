@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Truck, Phone } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
+import { useContent } from '../hooks/useContent';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const { content } = useContent('General');
+  const logo = content['site_logo'];
+  const siteName = content['site_name']?.text || 'Krenium';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,15 +40,13 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <Link to="/" className="flex items-center gap-2 group">
-          <div className="bg-primary p-2 rounded-lg group-hover:bg-secondary transition-colors">
-            <Truck className="text-white w-6 h-6" />
-          </div>
-          <span className={cn(
-            "font-bold text-xl tracking-tight",
-            isDarkText ? "text-primary" : "text-white"
-          )}>
-            Krenium<span className="text-secondary">Resources</span>
-          </span>
+          {logo?.url ? (
+            <img src={logo.url} alt={logo.alt || "Logo"} className="h-10 w-auto object-contain" />
+          ) : (
+            <div className="bg-primary p-2 rounded-lg group-hover:bg-secondary transition-colors">
+              <Truck className="text-white w-6 h-6" />
+            </div>
+          )}
         </Link>
 
         {/* Desktop Nav */}
@@ -54,9 +56,9 @@ const Navbar = () => {
               key={link.path}
               to={link.path}
               className={cn(
-                'text-sm font-medium transition-colors hover:text-secondary',
-                isDarkText ? 'text-slate-700' : 'text-white',
-                location.pathname === link.path && 'text-secondary'
+                'text-sm font-medium transition-colors',
+                isDarkText ? 'text-slate-700 hover:text-secondary' : 'text-white/80 hover:text-white',
+                location.pathname === link.path && (isDarkText ? 'text-secondary font-bold' : 'text-white font-bold')
               )}
             >
               {link.name}

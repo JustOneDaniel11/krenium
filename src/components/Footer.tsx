@@ -1,20 +1,29 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Truck, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { useContent } from '../hooks/useContent';
 
 const Footer = () => {
+  const { content } = useContent('General');
+  const logo = content['site_logo'];
+  const siteName = content['site_name']?.text || 'Krenium';
+  const contactEmail = content['contact_email']?.text || 'info@kreniumresources.com';
+  const contactPhone = content['contact_phone']?.text || '+234 800 LOGISTICS';
+  const address = content['address']?.text || '123 Logistics Plaza, Ikeja, Lagos, Nigeria';
+
   return (
     <footer className="bg-primary text-white pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
         {/* Company Info */}
         <div className="space-y-6">
           <Link to="/" className="flex items-center gap-2">
-            <div className="bg-white p-2 rounded-lg">
-              <Truck className="text-primary w-6 h-6" />
-            </div>
-            <span className="font-bold text-2xl tracking-tight">
-              Krenium<span className="text-secondary">Resources</span>
-            </span>
+            {logo?.url ? (
+              <img src={logo.url} alt={logo.alt || "Logo"} className="h-10 w-auto object-contain bg-white p-1 rounded-lg" />
+            ) : (
+              <div className="bg-white p-2 rounded-lg">
+                <Truck className="text-primary w-6 h-6" />
+              </div>
+            )}
           </Link>
           <p className="text-slate-300 leading-relaxed">
             Your trusted partner for seamless logistics solutions across Nigeria. 
@@ -40,10 +49,10 @@ const Footer = () => {
         <div>
           <h3 className="text-lg font-bold mb-6 border-b border-white/10 pb-2">Quick Links</h3>
           <ul className="space-y-4">
-            <li><Link to="/about" className="text-slate-300 hover:text-secondary transition-colors">About Our Company</Link></li>
-            <li><Link to="/services" className="text-slate-300 hover:text-secondary transition-colors">Our Logistics Services</Link></li>
-            <li><Link to="/quote" className="text-slate-300 hover:text-secondary transition-colors">Request a Free Quote</Link></li>
-            <li><Link to="/contact" className="text-slate-300 hover:text-secondary transition-colors">Contact Support</Link></li>
+            <li><Link to="/about" className="text-slate-300 hover:text-white transition-colors">About Our Company</Link></li>
+            <li><Link to="/services" className="text-slate-300 hover:text-white transition-colors">Our Logistics Services</Link></li>
+            <li><Link to="/quote" className="text-slate-300 hover:text-white transition-colors">Request a Free Quote</Link></li>
+            <li><Link to="/contact" className="text-slate-300 hover:text-white transition-colors">Contact Support</Link></li>
           </ul>
         </div>
 
@@ -63,23 +72,23 @@ const Footer = () => {
           <h3 className="text-lg font-bold mb-6 border-b border-white/10 pb-2">Contact Us</h3>
           <ul className="space-y-4">
             <li className="flex items-start gap-3 text-slate-300">
-              <MapPin className="text-secondary shrink-0" size={20} />
-              <span>123 Logistics Plaza, Ikeja, Lagos, Nigeria</span>
+              <MapPin className="text-white shrink-0" size={20} />
+              <span>{address}</span>
             </li>
             <li className="flex items-center gap-3 text-slate-300">
-              <Phone className="text-secondary shrink-0" size={20} />
-              <span>+234 800 LOGISTICS</span>
+              <Phone className="text-white shrink-0" size={20} />
+              <span>{contactPhone}</span>
             </li>
             <li className="flex items-center gap-3 text-slate-300">
-              <Mail className="text-secondary shrink-0" size={20} />
-              <span>info@kreniumresources.com</span>
+              <Mail className="text-white shrink-0" size={20} />
+              <span>{contactEmail}</span>
             </li>
           </ul>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 mt-16 pt-8 border-t border-white/10 text-center text-slate-400 text-sm">
-        <p>&copy; {new Date().getFullYear()} Krenium Resources Moving and Logistics. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} {siteName} Resources Moving and Logistics. All rights reserved.</p>
       </div>
     </footer>
   );

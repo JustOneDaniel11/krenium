@@ -1,59 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { collection, addDoc } from 'firebase/firestore';
-import { db, auth } from '../firebase';
+import { supabase } from '../lib/supabase';
 import { Mail, Phone, MapPin, Send, CheckCircle2, Clock, Globe, Truck, Loader2 } from 'lucide-react';
-
-enum OperationType {
-  CREATE = 'create',
-  UPDATE = 'update',
-  DELETE = 'delete',
-  LIST = 'list',
-  GET = 'get',
-  WRITE = 'write',
-}
-
-interface FirestoreErrorInfo {
-  error: string;
-  operationType: OperationType;
-  path: string | null;
-  authInfo: {
-    userId: string | undefined;
-    email: string | null | undefined;
-    emailVerified: boolean | undefined;
-    isAnonymous: boolean | undefined;
-    tenantId: string | null | undefined;
-    providerInfo: {
-      providerId: string;
-      displayName: string | null;
-      email: string | null;
-      photoUrl: string | null;
-    }[];
-  }
-}
-
-function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
-  const errInfo: FirestoreErrorInfo = {
-    error: error instanceof Error ? error.message : String(error),
-    authInfo: {
-      userId: auth.currentUser?.uid,
-      email: auth.currentUser?.email,
-      emailVerified: auth.currentUser?.emailVerified,
-      isAnonymous: auth.currentUser?.isAnonymous,
-      tenantId: auth.currentUser?.tenantId,
-      providerInfo: auth.currentUser?.providerData.map(provider => ({
-        providerId: provider.providerId,
-        displayName: provider.displayName,
-        email: provider.email,
-        photoUrl: provider.photoURL
-      })) || []
-    },
-    operationType,
-    path
-  }
-  console.error('Firestore Error: ', JSON.stringify(errInfo));
-  throw new Error(JSON.stringify(errInfo));
-}
 
 const Contact = () => {
   const [submitted, setSubmitted] = useState(false);
@@ -68,17 +16,23 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const path = 'enquiries';
     try {
-      await addDoc(collection(db, path), {
-        ...formData,
-        phone: 'N/A', // Contact form doesn't have phone field in original UI
-        status: 'new',
-        createdAt: new Date().toISOString()
-      });
+      const { error } = await supabase.from('enquiries').insert([
+        {
+          full_name: formData.fullName,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+          phone: 'N/A',
+          status: 'new'
+        }
+      ]);
+
+      if (error) throw error;
       setSubmitted(true);
-    } catch (err) {
-      handleFirestoreError(err, OperationType.CREATE, path);
+    } catch (err: any) {
+      console.error('Supabase Error:', err);
+      alert(err.message || 'Failed to send message');
     } finally {
       setLoading(false);
     }
@@ -125,7 +79,7 @@ const Contact = () => {
             </div>
 
             <div className="bg-primary p-8 rounded-3xl shadow-xl text-white">
-              <h3 className="text-xl font-bold mb-6 flex items-center gap-2"><Clock size={20} className="text-secondary" /> Business Hours</h3>
+              <h3 className="text-xl font-bold mb-6 flex items-center gap-2"><Clock size={20} className="text-blue-200" /> Business Hours</h3>
               <div className="space-y-4 text-sm">
                 <div className="flex justify-between border-b border-white/10 pb-2">
                   <span className="text-slate-300">Mon - Fri</span>
@@ -137,7 +91,7 @@ const Contact = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-300">Sunday</span>
-                  <span className="font-bold text-secondary">Closed</span>
+                  <span className="font-bold text-blue-200">Closed</span>
                 </div>
               </div>
             </div>

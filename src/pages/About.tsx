@@ -1,8 +1,18 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Shield, Zap, Users, Globe, Award, CheckCircle2, Quote as QuoteIcon } from 'lucide-react';
+import { useContent } from '../hooks/useContent';
 
 const About = () => {
+  const { content } = useContent('About');
+  
+  const storyImg = content.about_story?.url || "https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&q=80&w=1000";
+  const founderImg = content.founder_image?.url || "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800";
+  const founderName = content.founder_name?.text || "Kenneth Onyekachi Onyenwe";
+  const founderTitle = content.founder_title?.text || "Operating Director | Logistics & Operations Executive";
+  const founderMessage = content.founder_message?.text || "Logistics is more than just moving items from point A to point B. It's about building trust, enabling commerce, and connecting people. At Krenium, we are dedicated to creating a network that every Nigerian can rely on, powered by integrity and driven by innovation.";
+  const founderSummary = content.founder_summary?.text || "Dynamic and result-driven Logistics and Operations Executive with over a decade of progressive experience managing large-scale logistics operations, corporate relocations, haulage services, diesel supply (AGO), and strategic project coordination across Nigeria.";
+
   return (
     <div className="pt-16">
       {/* 1. Hero Section */}
@@ -83,7 +93,7 @@ const About = () => {
             >
               <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl">
                 <img 
-                  src="https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&q=80&w=1000" 
+                  src={storyImg} 
                   alt="Logistics Operations" 
                   className="w-full h-auto"
                   referrerPolicy="no-referrer"
@@ -123,8 +133,8 @@ const About = () => {
             <div className="flex flex-col lg:flex-row">
               <div className="lg:w-2/5 relative">
                 <img 
-                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800" 
-                  alt="Kenneth Onyekachi Onyenwe" 
+                  src={founderImg} 
+                  alt={founderName} 
                   className="w-full h-full object-cover min-h-[400px]"
                   referrerPolicy="no-referrer"
                 />
@@ -133,9 +143,9 @@ const About = () => {
               
               <div className="lg:w-3/5 p-8 md:p-12 lg:p-16 flex flex-col justify-center">
                 <div className="mb-8">
-                  <h4 className="text-3xl font-bold text-primary mb-2">Kenneth Onyekachi Onyenwe</h4>
+                  <h4 className="text-3xl font-bold text-primary mb-2">{founderName}</h4>
                   <p className="text-secondary font-semibold text-lg uppercase tracking-wide">
-                    Operating Director | Logistics & Operations Executive
+                    {founderTitle}
                   </p>
                 </div>
                 
@@ -143,16 +153,10 @@ const About = () => {
                   <QuoteIcon className="absolute -top-6 -left-6 text-slate-100 w-16 h-16 -z-0" />
                   <div className="relative z-10 space-y-6 text-slate-600 leading-relaxed">
                     <p>
-                      Kenneth Onyekachi Onyenwe is a seasoned Logistics and Operations Executive with over a decade of experience managing large-scale logistics, corporate relocations, haulage operations, and diesel (AGO) distribution across Nigeria.
+                      {founderSummary}
                     </p>
                     <p>
-                      As the Operating Director at Krenium Resources Oil/Logistics Limited, he leads nationwide logistics operations, overseeing fleet management, supply chain execution, and strategic partnerships. His expertise lies in optimizing operations, improving delivery efficiency, and ensuring seamless coordination of complex projects.
-                    </p>
-                    <p>
-                      Throughout his career, Kenneth has successfully handled high-value logistics and relocation projects for government officials, financial institutions, and multinational organizations, including UBA, Heritage Bank, and FBN Capital. He has also contributed to major projects such as the Lagos–Calabar Coastal Highway and Big Brother Naija production logistics.
-                    </p>
-                    <p className="font-medium text-primary italic">
-                      "He is known for his leadership, strategic thinking, and commitment to operational excellence."
+                      {founderMessage}
                     </p>
                   </div>
                 </div>
@@ -182,7 +186,7 @@ const About = () => {
                 title: "Efficiency",
                 desc: "Optimized routes and advanced fleet management for the fastest delivery possible.",
                 icon: <Zap className="w-8 h-8" />,
-                color: "bg-orange-50 text-orange-600"
+                color: "bg-slate-100 text-slate-900"
               },
               {
                 title: "Professional Team",
@@ -229,7 +233,7 @@ const About = () => {
         <div className="container mx-auto px-4 relative z-10 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">Ready to experience seamless logistics?</h2>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button className="px-8 py-4 bg-secondary text-white font-bold rounded-full hover:bg-orange-600 transition-colors shadow-lg shadow-secondary/20">
+            <button className="px-8 py-4 bg-secondary text-white font-bold rounded-full hover:bg-slate-800 transition-colors shadow-lg shadow-secondary/20">
               Get a Quote
             </button>
             <button className="px-8 py-4 bg-white text-primary font-bold rounded-full hover:bg-slate-100 transition-colors">
