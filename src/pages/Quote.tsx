@@ -109,7 +109,7 @@ const Quote = () => {
       <SEO 
         title="Get a Quote – Krenium Logistics & Truck Rentals in Lagos"
         description="Request a free quote for logistics in Lagos, truck rentals, and moving services from Krenium Logistics and Oil Resources Limited."
-        canonicalUrl="https://kreniumlogistics.com/get-quote"
+        canonicalUrl="https://www.kreniumresources.com/get-quote"
       />
       {/* Header */}
       <section className="bg-primary py-24 px-4 text-white text-center relative overflow-hidden">

@@ -21,7 +21,7 @@ const About = () => {
       "@type": "Organization",
       "name": "Krenium Logistics and Oil Resources Limited",
       "description": "Trusted logistics in Lagos, providing moving services and truck rentals.",
-      "url": "https://kreniumlogistics.com/about"
+      "url": "https://www.kreniumresources.com/about"
     }
   };
 
@@ -30,7 +30,7 @@ const About = () => {
       <SEO 
         title="About Krenium Logistics and Oil Resources Limited | Trusted Logistics in Lagos"
         description="Learn about Krenium Logistics and Oil Resources Limited, your trusted partner for logistics in Lagos, truck rentals, and moving services."
-        canonicalUrl="https://kreniumlogistics.com/about"
+        canonicalUrl="https://www.kreniumresources.com/about"
         schema={schema}
       />
       {/* 1. Hero Section */}

@@ -44,7 +44,7 @@ const Contact = () => {
       <SEO 
         title="Contact Krenium Logistics | Logistics Company in Lagos"
         description="Contact Krenium Logistics and Oil Resources Limited for reliable logistics in Lagos, truck rentals, and moving services."
-        canonicalUrl="https://kreniumlogistics.com/contact"
+        canonicalUrl="https://www.kreniumresources.com/contact"
       />
       {/* Header */}
       <section className="bg-primary py-20 px-4 text-white text-center">
@@ -71,8 +71,8 @@ const Contact = () => {
               <div className="bg-secondary/10 p-4 rounded-2xl text-secondary"><Mail size={24} /></div>
               <div>
                 <h3 className="text-xl font-bold text-primary mb-2">Email</h3>
-                <p className="text-slate-600 mb-1">info@kreniumlogistics.com</p>
-                <p className="text-slate-600">support@kreniumlogistics.com</p>
+                <p className="text-slate-600 mb-1">info@kreniumresources.com</p>
+                <p className="text-slate-600">support@kreniumresources.com</p>
               </div>
             </div>
 

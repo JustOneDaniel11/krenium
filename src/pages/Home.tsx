@@ -25,7 +25,7 @@ const Home = () => {
       "addressLocality": "Lagos",
       "addressCountry": "NG"
     },
-    "url": "https://kreniumlogistics.com"
+    "url": "https://www.kreniumresources.com"
   };
 
   return (
@@ -33,7 +33,7 @@ const Home = () => {
       <SEO 
         title="Krenium Logistics and Oil Resources Limited | Logistics in Lagos & Truck Rentals"
         description="Krenium Logistics and Oil Resources Limited provides top-tier logistics in Lagos, affordable truck rentals, and reliable moving services."
-        canonicalUrl="https://kreniumlogistics.com/"
+        canonicalUrl="https://www.kreniumresources.com/"
         schema={schema}
       />
       {/* Hero Section */}
