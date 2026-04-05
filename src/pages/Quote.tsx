@@ -16,6 +16,7 @@ import {
   Shield,
   Loader2
 } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const Quote = () => {
   const [activeTab, setActiveTab] = useState<'quote' | 'enquiry'>('quote');
@@ -105,6 +106,11 @@ const Quote = () => {
 
   return (
     <div className="pt-20 min-h-screen bg-slate-50">
+      <SEO 
+        title="Get a Quote – Krenium Logistics & Truck Rentals in Lagos"
+        description="Request a free quote for logistics in Lagos, truck rentals, and moving services from Krenium Logistics and Oil Resources Limited."
+        canonicalUrl="https://kreniumlogistics.com/get-quote"
+      />
       {/* Header */}
       <section className="bg-primary py-24 px-4 text-white text-center relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
@@ -116,7 +122,7 @@ const Quote = () => {
           >
             Tell Us What You Need
           </motion.h1>
-          <p className="text-xl text-slate-300">We're here to provide the best logistics solutions for your business.</p>
+          <p className="text-xl text-slate-300">We're here to provide the best logistics solutions for your business. Get a quote for logistics in Lagos, truck rentals, and moving services from Krenium Logistics and Oil Resources Limited.</p>
         </div>
       </section>
 

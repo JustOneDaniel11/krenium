@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { supabase } from '../lib/supabase';
 import { Mail, Phone, MapPin, Send, CheckCircle2, Clock, Globe, Truck, Loader2 } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const Contact = () => {
   const [submitted, setSubmitted] = useState(false);
@@ -40,11 +41,16 @@ const Contact = () => {
 
   return (
     <div className="pt-20 min-h-screen bg-slate-50">
+      <SEO 
+        title="Contact Krenium Logistics | Logistics Company in Lagos"
+        description="Contact Krenium Logistics and Oil Resources Limited for reliable logistics in Lagos, truck rentals, and moving services."
+        canonicalUrl="https://kreniumlogistics.com/contact"
+      />
       {/* Header */}
       <section className="bg-primary py-20 px-4 text-white text-center">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Contact Us</h1>
-          <p className="text-lg text-slate-300">We're here to help with all your logistics and delivery needs.</p>
+          <p className="text-lg text-slate-300">We're here to help with all your logistics and delivery needs. Contact Krenium Logistics and Oil Resources Limited for reliable logistics in Lagos and truck rentals.</p>
         </div>
       </section>
 
@@ -65,8 +71,8 @@ const Contact = () => {
               <div className="bg-secondary/10 p-4 rounded-2xl text-secondary"><Mail size={24} /></div>
               <div>
                 <h3 className="text-xl font-bold text-primary mb-2">Email</h3>
-                <p className="text-slate-600 mb-1">info@naijalogistics.com</p>
-                <p className="text-slate-600">support@naijalogistics.com</p>
+                <p className="text-slate-600 mb-1">info@kreniumlogistics.com</p>
+                <p className="text-slate-600">support@kreniumlogistics.com</p>
               </div>
             </div>
 

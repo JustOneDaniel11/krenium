@@ -3,9 +3,27 @@ import { motion } from 'motion/react';
 import { Truck, Package, Briefcase, Zap, Shield, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useContent } from '../hooks/useContent';
+import SEO from '../components/SEO';
 
 const Services = () => {
   const { content } = useContent('Services');
+
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": "Logistics and Truck Rentals",
+    "provider": {
+      "@type": "LocalBusiness",
+      "name": "Krenium Logistics and Oil Resources Limited",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Lagos",
+        "addressCountry": "NG"
+      }
+    },
+    "areaServed": "Lagos, Nigeria",
+    "description": "Professional logistics in Lagos, including truck rentals, corporate relocation, and haulage services."
+  };
 
   const services = [
     {
@@ -79,7 +97,7 @@ const Services = () => {
             Our Logistics Services
           </motion.h1>
           <p className="text-xl text-slate-300 leading-relaxed">
-            Comprehensive delivery and supply chain solutions tailored to your needs.
+            Comprehensive delivery and supply chain solutions tailored to your needs. Krenium Logistics and Oil Resources Limited provides the best logistics in Lagos, including affordable truck rentals and reliable moving services.
           </p>
         </div>
       </section>
@@ -114,7 +132,7 @@ const Services = () => {
                   </ul>
                 </div>
                 <div className="p-8 pt-0 mt-auto">
-                  <Link to="/quote" className="w-full bg-primary hover:bg-primary/90 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all">
+                  <Link to="/get-quote" className="w-full bg-primary hover:bg-primary/90 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all">
                     Get a Quote <ArrowRight size={18} />
                   </Link>
                 </div>

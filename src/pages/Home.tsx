@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, Shield, Zap, BarChart3, Users, Award, Truck, Calculator } from 'lucide-react';
+import { ArrowRight, Shield, Zap, BarChart3, Users, Award, Truck, Calculator, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import OperationsSlider from '../components/OperationsSlider';
 import { useContent } from '../hooks/useContent';
+import SEO from '../components/SEO';
 
 const Home = () => {
   const { content } = useContent('Home');
@@ -13,14 +14,34 @@ const Home = () => {
   const relocationImg = serviceContent.service_relocation?.url || "https://images.unsplash.com/photo-1600585154340-be6199f74009?auto=format&fit=crop&q=80&w=800";
   const haulageImg = serviceContent.service_haulage?.url || "https://images.unsplash.com/photo-1580674684081-7617fbf3d745?auto=format&fit=crop&q=80&w=800";
 
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Krenium Logistics and Oil Resources Limited",
+    "image": heroBg,
+    "description": "Krenium Logistics and Oil Resources Limited provides top-tier logistics in Lagos, affordable truck rentals, and reliable moving services.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Lagos",
+      "addressCountry": "NG"
+    },
+    "url": "https://kreniumlogistics.com"
+  };
+
   return (
     <div className="flex flex-col w-full">
+      <SEO 
+        title="Krenium Logistics and Oil Resources Limited | Logistics in Lagos & Truck Rentals"
+        description="Krenium Logistics and Oil Resources Limited provides top-tier logistics in Lagos, affordable truck rentals, and reliable moving services."
+        canonicalUrl="https://kreniumlogistics.com/"
+        schema={schema}
+      />
       {/* Hero Section */}
       <section className="relative h-screen min-h-[600px] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img 
             src={heroBg} 
-            alt="Logistics Background" 
+            alt="Krenium Logistics and Oil Resources Limited - Logistics in Lagos Background" 
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
           />
@@ -45,7 +66,7 @@ const Home = () => {
               We provide secure, efficient, and transparent logistics solutions for businesses and individuals.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/quote" className="bg-secondary hover:bg-slate-800 text-white px-10 py-4 rounded-lg font-bold text-lg transition-all shadow-xl">
+              <Link to="/get-quote" className="bg-secondary hover:bg-slate-800 text-white px-10 py-4 rounded-lg font-bold text-lg transition-all shadow-xl">
                 Get a Quote
               </Link>
             </div>
@@ -129,13 +150,16 @@ const Home = () => {
           <div className="text-center mb-16">
             <h2 className="text-primary text-sm font-bold uppercase tracking-widest mb-4">Our Services</h2>
             <h3 className="text-4xl md:text-5xl font-bold text-slate-900">Logistics Solutions for Every Need</h3>
+            <p className="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">
+              At Krenium Logistics and Oil Resources Limited, we specialize in providing top-notch logistics in Lagos. Whether you need affordable truck rentals in Lagos or reliable moving services, we have you covered.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {[
               {
-                title: 'Corporate & Residential Relocation',
-                desc: 'Seamless office and private home moves with professionalism and care.',
+                title: 'Reliable Moving Services in Lagos',
+                desc: 'Seamless office and private home moves with professionalism and care. Trust Krenium for your relocation needs.',
                 icon: <Truck size={40} className="text-secondary" />,
                 img: relocationImg
               },
@@ -174,10 +198,10 @@ const Home = () => {
         <div className="absolute top-0 right-0 w-1/3 h-full bg-secondary/10 -skew-x-12 transform translate-x-1/2"></div>
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16 relative z-10">
           <div className="lg:w-1/2">
-            <h2 className="text-blue-200 text-sm font-bold uppercase tracking-widest mb-4">Why Choose Us</h2>
-            <h3 className="text-4xl md:text-5xl font-bold mb-8">The Most Trusted Logistics Partner in Nigeria</h3>
-            <p className="text-slate-300 text-lg mb-12 leading-relaxed">
-              We combine local expertise with high standards to ensure your shipments are handled with the highest level of professionalism and care.
+            <h2 className="text-blue-200 text-sm font-bold uppercase tracking-widest mb-4">Why Choose Krenium Logistics in Lagos</h2>
+            <h3 className="text-4xl md:text-5xl font-bold mb-8">Delivering Excellence, Every Time</h3>
+            <p className="text-slate-300 mb-10 text-lg leading-relaxed">
+              As a leading logistics company in Lagos, Krenium Logistics and Oil Resources Limited is dedicated to providing fast, secure, and affordable truck rentals and moving services. We combine local expertise with high standards to ensure your shipments are handled with the highest level of professionalism and care.
             </p>
             
             <div className="space-y-8">
@@ -199,7 +223,7 @@ const Home = () => {
             <div className="relative">
               <img 
                 src="https://images.unsplash.com/photo-1566576721346-d4a3b4eaad5b?auto=format&fit=crop&q=80&w=1000" 
-                alt="Logistics Team" 
+                alt="Krenium Logistics Team - Reliable Moving Services in Lagos" 
                 className="rounded-3xl shadow-2xl relative z-10"
                 referrerPolicy="no-referrer"
               />
@@ -215,10 +239,45 @@ const Home = () => {
       {/* Operations Slider */}
       <OperationsSlider />
 
+      {/* Affordable Truck Rentals Section */}
+      <section className="py-24 px-4 bg-white">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
+          <div className="md:w-1/2">
+            <img 
+              src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&q=80&w=1000" 
+              alt="Truck Rentals in Lagos" 
+              className="rounded-3xl shadow-xl w-full"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+          <div className="md:w-1/2">
+            <h2 className="text-primary text-sm font-bold uppercase tracking-widest mb-4">Affordable Truck Rentals in Lagos</h2>
+            <h3 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">Your Trusted Partner for Heavy Lifting</h3>
+            <p className="text-lg text-slate-600 mb-8 leading-relaxed">
+              At Krenium Logistics and Oil Resources Limited, we offer flexible and affordable truck rentals in Lagos. Whether you need a truck for a day or a long-term lease for your business operations, our fleet is well-maintained and ready to serve your haulage needs across Nigeria.
+            </p>
+            <ul className="space-y-4 mb-8">
+              <li className="flex items-center gap-3 text-slate-700 font-medium">
+                <CheckCircle2 className="text-secondary" size={24} /> Well-maintained fleet of trucks
+              </li>
+              <li className="flex items-center gap-3 text-slate-700 font-medium">
+                <CheckCircle2 className="text-secondary" size={24} /> Flexible rental plans
+              </li>
+              <li className="flex items-center gap-3 text-slate-700 font-medium">
+                <CheckCircle2 className="text-secondary" size={24} /> Experienced drivers available
+              </li>
+            </ul>
+            <Link to="/get-quote" className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-xl font-bold transition-all shadow-lg">
+              Book a Truck Now <ArrowRight size={20} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Quote Quick Access */}
       <section className="py-24 px-4 bg-slate-50">
         <div className="max-w-3xl mx-auto">
-          <Link to="/quote" className="group bg-white p-10 rounded-3xl shadow-xl border border-slate-100 flex items-center gap-8 hover:bg-secondary hover:text-white transition-all duration-500">
+          <Link to="/get-quote" className="group bg-white p-10 rounded-3xl shadow-xl border border-slate-100 flex items-center gap-8 hover:bg-secondary hover:text-white transition-all duration-500">
             <div className="bg-primary/10 group-hover:bg-white/10 p-6 rounded-2xl transition-colors">
               <Calculator className="text-primary group-hover:text-white" size={40} />
             </div>
@@ -269,7 +328,7 @@ const Home = () => {
           <h2 className="text-4xl md:text-5xl font-bold mb-6 relative z-10">Ready to Start Shipping?</h2>
           <p className="text-xl mb-10 opacity-90 relative z-10">Get a free quote today for your delivery.</p>
           <div className="flex flex-wrap justify-center gap-4 relative z-10">
-            <Link to="/quote" className="bg-white text-secondary px-10 py-4 rounded-xl font-bold text-lg hover:bg-slate-100 transition-all shadow-lg">
+            <Link to="/get-quote" className="bg-white text-secondary px-10 py-4 rounded-xl font-bold text-lg hover:bg-slate-100 transition-all shadow-lg">
               Get a Free Quote
             </Link>
           </div>

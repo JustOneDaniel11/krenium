@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Shield, Zap, Users, Globe, Award, CheckCircle2, Quote as QuoteIcon } from 'lucide-react';
 import { useContent } from '../hooks/useContent';
+import SEO from '../components/SEO';
 
 const About = () => {
   const { content } = useContent('About');
@@ -13,14 +14,31 @@ const About = () => {
   const founderMessage = content.founder_message?.text || "Logistics is more than just moving items from point A to point B. It's about building trust, enabling commerce, and connecting people. At Krenium, we are dedicated to creating a network that every Nigerian can rely on, powered by integrity and driven by innovation.";
   const founderSummary = content.founder_summary?.text || "Dynamic and result-driven Logistics and Operations Executive with over a decade of progressive experience managing large-scale logistics operations, corporate relocations, haulage services, diesel supply (AGO), and strategic project coordination across Nigeria.";
 
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Krenium Logistics and Oil Resources Limited",
+      "description": "Trusted logistics in Lagos, providing moving services and truck rentals.",
+      "url": "https://kreniumlogistics.com/about"
+    }
+  };
+
   return (
     <div className="pt-16">
+      <SEO 
+        title="About Krenium Logistics and Oil Resources Limited | Trusted Logistics in Lagos"
+        description="Learn about Krenium Logistics and Oil Resources Limited, your trusted partner for logistics in Lagos, truck rentals, and moving services."
+        canonicalUrl="https://kreniumlogistics.com/about"
+        schema={schema}
+      />
       {/* 1. Hero Section */}
       <section className="relative h-[60vh] flex items-center justify-center overflow-hidden bg-slate-900">
         <div className="absolute inset-0 z-0">
           <img 
             src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=2000" 
-            alt="Logistics Background" 
+            alt="Krenium Logistics and Oil Resources Limited - Logistics in Lagos Background" 
             className="w-full h-full object-cover opacity-40"
             referrerPolicy="no-referrer"
           />
@@ -65,7 +83,7 @@ const About = () => {
                   A Reliable Logistics & Operations Powerhouse in Nigeria
                 </h3>
                 <p className="text-slate-600 text-lg leading-relaxed mb-8">
-                  Krenium Resources is a premier logistics and operations company dedicated to providing world-class supply chain solutions across Nigeria. We pride ourselves on our unwavering commitment to <strong>efficiency</strong>, <strong>professionalism</strong>, and <strong>client satisfaction</strong>. With a robust <strong>nationwide network</strong>, we ensure that your goods, assets, and operations are managed with the highest level of precision and care.
+                  Krenium Logistics and Oil Resources Limited is a premier logistics and operations company dedicated to providing world-class supply chain solutions. If you are looking for reliable logistics in Lagos or affordable truck rentals, we are your trusted partner. We pride ourselves on our unwavering commitment to <strong>efficiency</strong>, <strong>professionalism</strong>, and <strong>client satisfaction</strong>. With a robust <strong>nationwide network</strong>, we ensure that your goods, assets, and operations are managed with the highest level of precision and care.
                 </p>
                 <div className="grid grid-cols-2 gap-6">
                   <div className="flex items-center gap-3">
@@ -94,7 +112,7 @@ const About = () => {
               <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl">
                 <img 
                   src={storyImg} 
-                  alt="Logistics Operations" 
+                  alt="Krenium Logistics Operations - Truck Rentals in Lagos" 
                   className="w-full h-auto"
                   referrerPolicy="no-referrer"
                 />
