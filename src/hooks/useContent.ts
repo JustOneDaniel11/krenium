@@ -2,8 +2,12 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 
 export const useContent = (section?: string) => {
-  const [content, setContent] = useState<Record<string, any>>({});
-  const [loading, setLoading] = useState(true);
+  const cacheKey = `krenium_content_${section || 'all'}`;
+  const [content, setContent] = useState<Record<string, any>>(() => {
+    const cached = localStorage.getItem(cacheKey);
+    return cached ? JSON.parse(cached) : {};
+  });
+  const [loading, setLoading] = useState(!localStorage.getItem(cacheKey));
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -22,8 +26,8 @@ export const useContent = (section?: string) => {
             contentData[item.key] = item;
           }
         });
-        console.log(`useContent fetched for section ${section}:`, contentData);
         setContent(contentData);
+        localStorage.setItem(cacheKey, JSON.stringify(contentData));
       } catch (error) {
         console.error("Content Fetch Error:", error);
       } finally {
@@ -33,7 +37,6 @@ export const useContent = (section?: string) => {
 
     fetchContent();
 
-    // Real-time subscription with unique channel name to avoid collisions
     const channelName = `content_changes_${Math.random().toString(36).substring(2, 9)}`;
     const subscription = supabase
       .channel(channelName)
@@ -45,14 +48,18 @@ export const useContent = (section?: string) => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [section]);
+  }, [section, cacheKey]);
 
   return { content, loading };
 };
 
 export const useSlider = () => {
-  const [images, setImages] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const cacheKey = 'krenium_slider';
+  const [images, setImages] = useState<any[]>(() => {
+    const cached = localStorage.getItem(cacheKey);
+    return cached ? JSON.parse(cached) : [];
+  });
+  const [loading, setLoading] = useState(!localStorage.getItem(cacheKey));
 
   useEffect(() => {
     const fetchSlider = async () => {
@@ -65,6 +72,7 @@ export const useSlider = () => {
         
         if (error) throw error;
         setImages(data || []);
+        localStorage.setItem(cacheKey, JSON.stringify(data || []));
       } catch (error) {
         console.error("Slider Fetch Error:", error);
       } finally {
@@ -74,7 +82,6 @@ export const useSlider = () => {
 
     fetchSlider();
 
-    // Real-time subscription with unique channel name to avoid collisions
     const channelName = `slider_changes_${Math.random().toString(36).substring(2, 9)}`;
     const subscription = supabase
       .channel(channelName)

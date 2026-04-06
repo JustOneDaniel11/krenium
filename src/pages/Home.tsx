@@ -10,9 +10,12 @@ const Home = () => {
   const { content } = useContent('Home');
   const { content: serviceContent } = useContent('Services');
 
-  const heroBg = content.hero_bg?.url || "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=2000";
-  const relocationImg = serviceContent.service_relocation?.url || "https://images.unsplash.com/photo-1600585154340-be6199f74009?auto=format&fit=crop&q=80&w=800";
-  const haulageImg = serviceContent.service_haulage?.url || "https://images.unsplash.com/photo-1580674684081-7617fbf3d745?auto=format&fit=crop&q=80&w=800";
+  const isOldUnsplash = content.hero_bg?.url?.includes('1586528116311-ad8dd3c8310d');
+  const heroBg = (content.hero_bg?.url && !isOldUnsplash) 
+    ? content.hero_bg.url 
+    : "https://images.pexels.com/photos/7414929/pexels-photo-7414929.jpeg?auto=compress&cs=tinysrgb&w=2000";
+  const relocationImg = serviceContent.service_relocation?.url;
+  const haulageImg = serviceContent.service_haulage?.url;
 
   const schema = {
     "@context": "https://schema.org",
@@ -59,11 +62,10 @@ const Home = () => {
               Fast & Reliable Logistics
             </span>
             <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
-              Moving Your Business <span className="text-blue-200">Across Nigeria</span>
+              Moving Your Home & Business <span className="text-blue-200">Across Nigeria</span>
             </h1>
             <p className="text-xl text-slate-200 mb-10 leading-relaxed">
-              Fast and secure deliveries within Nigeria. 
-              We provide secure, efficient, and transparent logistics solutions for businesses and individuals.
+              Fast and secure deliveries within Nigeria. We provide secure, efficient, and transparent logistics solutions for businesses and individuals such as cooperate and domestic house move, delivery of diesel, storage services and truck rentals and haulage.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link to="/get-quote" className="bg-secondary hover:bg-slate-800 text-white px-10 py-4 rounded-lg font-bold text-lg transition-all shadow-xl">
@@ -175,9 +177,11 @@ const Home = () => {
                 whileHover={{ y: -10 }}
                 className="bg-white rounded-2xl overflow-hidden shadow-lg border border-slate-100 group"
               >
-                <div className="h-48 overflow-hidden">
-                  <img src={service.img} alt={service.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" referrerPolicy="no-referrer" />
-                </div>
+                {service.img && (
+                  <div className="h-48 overflow-hidden">
+                    <img src={service.img} alt={service.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" referrerPolicy="no-referrer" />
+                  </div>
+                )}
                 <div className="p-8">
                   <div className="mb-4">{service.icon}</div>
                   <h4 className="text-2xl font-bold mb-4 text-primary">{service.title}</h4>
@@ -220,18 +224,20 @@ const Home = () => {
             </div>
           </div>
           <div className="lg:w-1/2">
-            <div className="relative">
-              <img 
-                src="https://images.unsplash.com/photo-1566576721346-d4a3b4eaad5b?auto=format&fit=crop&q=80&w=1000" 
-                alt="Krenium Logistics Team - Reliable Moving Services in Lagos" 
-                className="rounded-3xl shadow-2xl relative z-10"
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute -bottom-10 -left-10 bg-secondary p-8 rounded-2xl z-20 shadow-xl hidden md:block">
-                <div className="text-4xl font-bold mb-1">99.9%</div>
-                <div className="text-sm font-medium opacity-80">On-time Delivery Rate</div>
+            {content.why_choose_us_img?.url && (
+              <div className="relative">
+                <img 
+                  src={content.why_choose_us_img.url} 
+                  alt="Krenium Logistics Team - Reliable Moving Services in Lagos" 
+                  className="rounded-3xl shadow-2xl relative z-10"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute -bottom-10 -left-10 bg-secondary p-8 rounded-2xl z-20 shadow-xl hidden md:block">
+                  <div className="text-4xl font-bold mb-1">99.9%</div>
+                  <div className="text-sm font-medium opacity-80">On-time Delivery Rate</div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
@@ -244,7 +250,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-16">
           <div className="md:w-1/2">
             <img 
-              src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&q=80&w=1000" 
+              src={content.truck_rentals_img?.url || "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&q=80&w=1000"} 
               alt="Truck Rentals in Lagos" 
               className="rounded-3xl shadow-xl w-full"
               referrerPolicy="no-referrer"

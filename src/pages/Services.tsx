@@ -32,7 +32,7 @@ const Services = () => {
       desc: 'We handle seamless office (corporate) and private home moves with professionalism, ensuring your belongings are safely transported and delivered on time.',
       icon: <Truck size={48} className="text-secondary" />,
       features: ['Office relocation', 'Home moving', 'Professional packing', 'Safe transit'],
-      img: content.service_relocation?.url || 'https://images.unsplash.com/photo-1600585154340-be6199f74009?auto=format&fit=crop&q=80&w=800'
+      img: content.service_relocation?.url
     },
     {
       id: 'diesel',
@@ -40,7 +40,7 @@ const Services = () => {
       desc: 'We offer the sales and supply of diesel with prompt and secure doorstep delivery for businesses and individuals.',
       icon: <Zap size={48} className="text-secondary" />,
       features: ['Bulk supply', 'Doorstep delivery', 'Quality guaranteed', 'Business & Individual'],
-      img: content.service_diesel?.url || 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80&w=800'
+      img: content.service_diesel?.url
     },
     {
       id: 'haulage',
@@ -48,7 +48,7 @@ const Services = () => {
       desc: 'Our haulage solutions cover the transportation of goods in bulk, using well-maintained vehicles and experienced personnel.',
       icon: <Truck size={48} className="text-secondary" />,
       features: ['Bulk transportation', 'Experienced drivers', 'Well-maintained fleet', 'Nationwide coverage'],
-      img: content.service_haulage?.url || 'https://images.unsplash.com/photo-1580674684081-7617fbf3d745?auto=format&fit=crop&q=80&w=800'
+      img: content.service_haulage?.url
     },
     {
       id: 'storage',
@@ -56,7 +56,7 @@ const Services = () => {
       desc: 'We provide safe, secure, and accessible storage spaces for both short-term and long-term needs.',
       icon: <Package size={48} className="text-secondary" />,
       features: ['Short-term storage', 'Long-term storage', 'Secure facilities', 'Easy access'],
-      img: content.service_storage?.url || 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800'
+      img: content.service_storage?.url
     },
     {
       id: 'rental',
@@ -64,7 +64,7 @@ const Services = () => {
       desc: 'Flexible rental options for trucks and vans suitable for logistics, moving, and business operations.',
       icon: <Truck size={48} className="text-secondary" />,
       features: ['Truck rental', 'Van rental', 'Flexible terms', 'Business operations'],
-      img: content.service_rental?.url || 'https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&q=80&w=800'
+      img: content.service_rental?.url
     },
     {
       id: 'dispatch',
@@ -72,7 +72,7 @@ const Services = () => {
       desc: 'Fast and reliable dispatch services ensuring timely pickup and delivery of parcels and goods.',
       icon: <Zap size={48} className="text-secondary" />,
       features: ['Fast dispatch', 'Timely pickup', 'Reliable delivery', 'Parcel tracking'],
-      img: content.service_dispatch?.url || 'https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&q=80&w=800'
+      img: content.service_dispatch?.url
     },
     {
       id: 'consulting',
@@ -80,7 +80,7 @@ const Services = () => {
       desc: 'Expert advice and strategic planning to optimize your logistics and supply chain operations.',
       icon: <Briefcase size={48} className="text-secondary" />,
       features: ['Supply chain optimization', 'Strategic planning', 'Expert advice', 'Efficiency improvement'],
-      img: content.service_consulting?.url || 'https://images.unsplash.com/photo-1454165833767-027ff33027ef?auto=format&fit=crop&q=80&w=800'
+      img: content.service_consulting?.url
     }
   ];
 
@@ -115,9 +115,11 @@ const Services = () => {
                 viewport={{ once: true }}
                 className="bg-slate-50 rounded-3xl overflow-hidden border border-slate-100 flex flex-col h-full"
               >
-                <div className="h-56 overflow-hidden">
-                  <img src={service.img} alt={service.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                </div>
+                {service.img && (
+                  <div className="h-56 overflow-hidden">
+                    <img src={service.img} alt={service.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  </div>
+                )}
                 <div className="p-8 flex-grow">
                   <div className="mb-6">{service.icon}</div>
                   <h3 className="text-2xl font-bold text-primary mb-4">{service.title}</h3>

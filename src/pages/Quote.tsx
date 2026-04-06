@@ -69,6 +69,13 @@ const Quote = () => {
       ]);
 
       if (error) throw error;
+
+      // WhatsApp Redirect for Quote
+      const phoneNumber = "2348166548652";
+      const whatsappMessage = `*New Quote Request*\n\n*Name:* ${quoteData.fullName}\n*Phone:* ${quoteData.phone}\n*Email:* ${quoteData.email}\n*Pickup:* ${quoteData.pickup}\n*Destination:* ${quoteData.destination}\n*Package Type:* ${quoteData.packageType}\n*Weight:* ${quoteData.weight}\n*Speed:* ${quoteData.speed}\n*Pickup Date:* ${quoteData.pickupDate}\n*Instructions:* ${quoteData.instructions}`;
+      const encodedMessage = encodeURIComponent(whatsappMessage);
+      window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+
       setSubmitted(true);
     } catch (err: any) {
       console.error('Supabase Error:', err);
@@ -95,6 +102,13 @@ const Quote = () => {
       ]);
 
       if (error) throw error;
+
+      // WhatsApp Redirect for Enquiry
+      const phoneNumber = "2348166548652";
+      const whatsappMessage = `*New General Enquiry*\n\n*Name:* ${enquiryData.fullName}\n*Email:* ${enquiryData.email}\n*Phone:* ${enquiryData.phone}\n*Subject:* ${enquiryData.subject}\n*Message:* ${enquiryData.message}`;
+      const encodedMessage = encodeURIComponent(whatsappMessage);
+      window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+
       setSubmitted(true);
     } catch (err: any) {
       console.error('Supabase Error:', err);

@@ -30,6 +30,13 @@ const Contact = () => {
       ]);
 
       if (error) throw error;
+      
+      // WhatsApp Redirect
+      const phoneNumber = "2348166548652";
+      const whatsappMessage = `*New Contact Message*\n\n*Name:* ${formData.fullName}\n*Email:* ${formData.email}\n*Subject:* ${formData.subject}\n*Message:* ${formData.message}`;
+      const encodedMessage = encodeURIComponent(whatsappMessage);
+      window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+      
       setSubmitted(true);
     } catch (err: any) {
       console.error('Supabase Error:', err);
@@ -205,8 +212,12 @@ const Contact = () => {
               <div className="text-center p-8">
                 <MapPin size={64} className="text-secondary mx-auto mb-4 animate-bounce" />
                 <h4 className="text-2xl font-bold text-primary mb-2">Logistics Plaza, Ikeja</h4>
+                <p className="text-slate-500 max-w-md mx-auto mb-4">
+                  Our main hub is located in the heart of Lagos, providing easy access to major transport routes.
+                </p>
+                <h4 className="text-xl font-bold text-primary mb-2">Operation Location</h4>
                 <p className="text-slate-500 max-w-md mx-auto">
-                  Our main hub is located in the heart of Lagos, providing easy access to major transport routes and airports.
+                  Tipper Garage, Alasia Bus Stop by Lagos Business School, Lekki Epe Express Way.
                 </p>
                 <div className="mt-8 flex justify-center gap-4">
                   <div className="bg-white px-6 py-3 rounded-xl shadow-md flex items-center gap-2 text-sm font-bold text-primary">

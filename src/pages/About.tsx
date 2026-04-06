@@ -7,8 +7,8 @@ import SEO from '../components/SEO';
 const About = () => {
   const { content } = useContent('About');
   
-  const storyImg = content.about_story?.url || "https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&q=80&w=1000";
-  const founderImg = content.founder_image?.url || "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800";
+  const storyImg = content.about_story?.url;
+  const founderImg = content.founder_image?.url;
   const founderName = content.founder_name?.text || "Kenneth Onyekachi Onyenwe";
   const founderTitle = content.founder_title?.text || "Operating Director | Logistics & Operations Executive";
   const founderMessage = content.founder_message?.text || "Logistics is more than just moving items from point A to point B. It's about building trust, enabling commerce, and connecting people. At Krenium, we are dedicated to creating a network that every Nigerian can rely on, powered by integrity and driven by innovation.";
@@ -36,12 +36,14 @@ const About = () => {
       {/* 1. Hero Section */}
       <section className="relative h-[60vh] flex items-center justify-center overflow-hidden bg-slate-900">
         <div className="absolute inset-0 z-0">
-          <img 
-            src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=2000" 
-            alt="Krenium Logistics and Oil Resources Limited - Logistics in Lagos Background" 
-            className="w-full h-full object-cover opacity-40"
-            referrerPolicy="no-referrer"
-          />
+          {content.about_hero?.url && (
+            <img 
+              src={content.about_hero.url} 
+              alt="Krenium Logistics and Oil Resources Limited - Logistics in Lagos Background" 
+              className="w-full h-full object-cover opacity-40"
+              referrerPolicy="no-referrer"
+            />
+          )}
           <div className="absolute inset-0 bg-gradient-to-b from-primary/60 to-slate-900/80" />
         </div>
         
@@ -109,14 +111,16 @@ const About = () => {
               transition={{ duration: 0.8 }}
               className="lg:w-1/2 relative"
             >
-              <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl">
-                <img 
-                  src={storyImg} 
-                  alt="Krenium Logistics Operations - Truck Rentals in Lagos" 
-                  className="w-full h-auto"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
+              {storyImg && (
+                <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl">
+                  <img 
+                    src={storyImg} 
+                    alt="Krenium Logistics Operations - Truck Rentals in Lagos" 
+                    className="w-full h-auto"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+              )}
               <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl -z-0" />
               <div className="absolute -top-10 -left-10 w-48 h-48 bg-secondary/5 rounded-full blur-3xl -z-0" />
             </motion.div>
@@ -149,15 +153,17 @@ const About = () => {
 
           <div className="max-w-6xl mx-auto bg-white rounded-[2.5rem] shadow-xl overflow-hidden border border-slate-100">
             <div className="flex flex-col lg:flex-row">
-              <div className="lg:w-2/5 relative">
-                <img 
-                  src={founderImg} 
-                  alt={founderName} 
-                  className="w-full h-full object-cover min-h-[400px]"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent lg:hidden" />
-              </div>
+              {founderImg && (
+                <div className="lg:w-2/5 relative">
+                  <img 
+                    src={founderImg} 
+                    alt={founderName} 
+                    className="w-full h-full object-cover min-h-[400px]"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent lg:hidden" />
+                </div>
+              )}
               
               <div className="lg:w-3/5 p-8 md:p-12 lg:p-16 flex flex-col justify-center">
                 <div className="mb-8">

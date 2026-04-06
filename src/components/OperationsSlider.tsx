@@ -3,43 +3,15 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { useSlider } from '../hooks/useContent';
 
-const defaultOperations = [
-  {
-    url: 'https://images.unsplash.com/photo-1601750500644-798783856440?auto=format&fit=crop&q=80&w=1200',
-    caption: 'Fast nationwide delivery operations.',
-    title: 'Loading & Unloading'
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1586864387917-f575a622440d?auto=format&fit=crop&q=80&w=1200',
-    caption: 'Secure cargo handling by trained professionals.',
-    title: 'Packaging & Sorting'
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&q=80&w=1200',
-    caption: 'Efficient warehouse management.',
-    title: 'Warehouse Operations'
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1595246140625-573b715d11dc?auto=format&fit=crop&q=80&w=1200',
-    caption: 'Rapid dispatch and last-mile delivery.',
-    title: 'Dispatch Riders'
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1522071823991-b5ae7264040e?auto=format&fit=crop&q=80&w=1200',
-    caption: 'Strategic logistics planning and coordination.',
-    title: 'Team Coordination'
-  }
-];
-
 const OperationsSlider = () => {
   const { images, loading } = useSlider();
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const operations = images.length > 0 ? images.map(img => ({
+  const operations = images.map(img => ({
     url: img.url,
     title: img.title,
-    caption: img.caption || img.title // Using title as fallback if caption is empty
-  })) : defaultOperations;
+    caption: img.caption || img.title
+  }));
 
   useEffect(() => {
     if (operations.length === 0) return;
@@ -48,6 +20,8 @@ const OperationsSlider = () => {
     }, 5000);
     return () => clearInterval(timer);
   }, [operations.length]);
+
+  if (operations.length === 0) return null;
 
   const next = () => setCurrentIndex((prev) => (prev + 1) % operations.length);
   const prev = () => setCurrentIndex((prev) => (prev - 1 + operations.length) % operations.length);

@@ -18,11 +18,9 @@ const Footer = () => {
         <div className="space-y-6">
           <Link to="/" className="flex items-center gap-2">
             {logo?.url ? (
-              <img src={logo.url} alt={logo.alt || "Logo"} className="h-10 w-auto object-contain bg-white p-1 rounded-lg" />
+              <img src={logo.url} alt={logo.alt || "Logo"} className="h-10 w-auto object-contain" />
             ) : (
-              <div className="bg-white p-2 rounded-lg">
-                <Truck className="text-primary w-6 h-6" />
-              </div>
+              <span className="font-bold text-xl text-white">{siteName}</span>
             )}
           </Link>
           <p className="text-slate-300 leading-relaxed">
@@ -60,10 +58,13 @@ const Footer = () => {
         <div>
           <h3 className="text-lg font-bold mb-6 border-b border-white/10 pb-2">Our Services</h3>
           <ul className="space-y-4">
-            <li className="text-slate-300">Nationwide Delivery</li>
-            <li className="text-slate-300">Cargo & Freight</li>
-            <li className="text-slate-300">Express Courier</li>
-            <li className="text-slate-300">Warehousing Solutions</li>
+            <li><Link to="/services" className="text-slate-300 hover:text-white transition-colors">Corporate & Residential Relocation</Link></li>
+            <li><Link to="/services" className="text-slate-300 hover:text-white transition-colors">Diesel Supply & Delivery</Link></li>
+            <li><Link to="/services" className="text-slate-300 hover:text-white transition-colors">Haulage Services</Link></li>
+            <li><Link to="/services" className="text-slate-300 hover:text-white transition-colors">Storage Solutions</Link></li>
+            <li><Link to="/services" className="text-slate-300 hover:text-white transition-colors">Truck & Van Rental</Link></li>
+            <li><Link to="/services" className="text-slate-300 hover:text-white transition-colors">Dispatch & Delivery Services</Link></li>
+            <li><Link to="/services" className="text-slate-300 hover:text-white transition-colors">Logistics Consulting</Link></li>
           </ul>
         </div>
 

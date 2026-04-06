@@ -43,9 +43,7 @@ const Navbar = () => {
           {logo?.url ? (
             <img src={logo.url} alt={logo.alt || "Logo"} className="h-10 w-auto object-contain" />
           ) : (
-            <div className="bg-primary p-2 rounded-lg group-hover:bg-secondary transition-colors">
-              <Truck className="text-white w-6 h-6" />
-            </div>
+            <span className={cn("font-bold text-xl", isDarkText ? "text-primary" : "text-white")}>{siteName}</span>
           )}
         </Link>
 
