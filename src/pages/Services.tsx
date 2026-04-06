@@ -157,7 +157,7 @@ const Services = () => {
             {[
               { step: '01', title: 'Request Quote', desc: 'Fill our simple form or call us for a custom quote.' },
               { step: '02', title: 'Pickup', desc: 'We pick up your items from your location or you drop off.' },
-              { step: '03', title: 'Transit', desc: 'Your shipment moves securely through our network.' },
+              { step: '03', title: 'Transit', desc: 'Your items move securely through our network.' },
               { step: '04', title: 'Delivery', desc: 'Safe and timely delivery to the final destination.' },
             ].map((item, i) => (
               <div key={i} className="bg-white p-8 rounded-2xl shadow-lg text-center border border-slate-100">

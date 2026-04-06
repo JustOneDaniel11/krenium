@@ -24,7 +24,7 @@ const Quote = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
-  // Form State for Shipping Quote
+  // Form State for Moving Quote
   const [quoteData, setQuoteData] = useState({
     fullName: '',
     phone: '',
@@ -155,7 +155,7 @@ const Quote = () => {
               <Truck size={32} />
             </div>
             <div>
-              <h3 className={`text-2xl font-bold mb-2 ${activeTab === 'quote' ? 'text-primary' : 'text-slate-500'}`}>Request a Shipping Quote</h3>
+              <h3 className={`text-2xl font-bold mb-2 ${activeTab === 'quote' ? 'text-primary' : 'text-slate-500'}`}>Request a Moving Quote</h3>
               <p className="text-slate-500 text-sm">For clients ready to move items across Nigeria.</p>
             </div>
           </button>
@@ -356,7 +356,7 @@ const Quote = () => {
                         className="bg-slate-100 border border-slate-200 p-4 rounded-2xl flex items-center gap-3 text-slate-800"
                       >
                         <AlertCircle size={20} />
-                        <span className="font-medium">Priority Handling: Your shipment will be processed with the highest priority for the fastest delivery.</span>
+                        <span className="font-medium">Priority Handling: Your items will be processed with the highest priority for the fastest delivery.</span>
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -498,7 +498,7 @@ const Quote = () => {
               <Calculator size={24} />
             </div>
             <h4 className="text-xl font-bold text-primary mb-3">Instant Estimates</h4>
-            <p className="text-slate-500 text-sm leading-relaxed">Our team uses real-time data to provide the most accurate shipping estimates in the industry.</p>
+            <p className="text-slate-500 text-sm leading-relaxed">Our team uses real-time data to provide the most accurate moving and delivery estimates in the industry.</p>
           </div>
           <div className="bg-white p-8 rounded-3xl shadow-lg border border-slate-100">
             <div className="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center mb-6">
@@ -512,7 +512,7 @@ const Quote = () => {
               <Shield size={24} />
             </div>
             <h4 className="text-xl font-bold text-primary mb-3">Fully Insured</h4>
-            <p className="text-slate-500 text-sm leading-relaxed">Every shipment is backed by our comprehensive insurance policy for your peace of mind.</p>
+            <p className="text-slate-500 text-sm leading-relaxed">Every delivery is backed by our comprehensive insurance policy for your peace of mind.</p>
           </div>
         </div>
       </section>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Shield, Zap, Users, Globe, Award, CheckCircle2, Quote as QuoteIcon } from 'lucide-react';
+import { Shield, Zap, Users, MapPin, Award, CheckCircle2, Quote as QuoteIcon } from 'lucide-react';
 import { useContent } from '../hooks/useContent';
 import SEO from '../components/SEO';
 
@@ -221,7 +221,7 @@ const About = () => {
               {
                 title: "Nationwide Reach",
                 desc: "From Lagos to Calabar, we cover every corner of Nigeria with our extensive network.",
-                icon: <Globe className="w-8 h-8" />,
+                icon: <MapPin className="w-8 h-8" />,
                 color: "bg-purple-50 text-purple-600"
               }
             ].map((item, index) => (

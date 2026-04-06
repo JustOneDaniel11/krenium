@@ -89,7 +89,7 @@ const Home = () => {
             {[
               { step: '01', title: 'Request Quote', desc: 'Fill our simple form or call us for a custom quote.' },
               { step: '02', title: 'Pickup', desc: 'We pick up your items from your location or you drop off.' },
-              { step: '03', title: 'Transit', desc: 'Your shipment moves securely through our network.' },
+              { step: '03', title: 'Transit', desc: 'Your items move securely through our network.' },
               { step: '04', title: 'Delivery', desc: 'Safe and timely delivery to the final destination.' },
             ].map((item, i) => (
               <div key={i} className="bg-white p-8 rounded-2xl shadow-lg text-center border border-slate-100">
@@ -205,7 +205,7 @@ const Home = () => {
             <h2 className="text-blue-200 text-sm font-bold uppercase tracking-widest mb-4">Why Choose Krenium Logistics in Lagos</h2>
             <h3 className="text-4xl md:text-5xl font-bold mb-8">Delivering Excellence, Every Time</h3>
             <p className="text-slate-300 mb-10 text-lg leading-relaxed">
-              As a leading logistics company in Lagos, Krenium Logistics and Oil Resources Limited is dedicated to providing fast, secure, and affordable truck rentals and moving services. We combine local expertise with high standards to ensure your shipments are handled with the highest level of professionalism and care.
+              As a leading logistics company in Lagos, Krenium Logistics and Oil Resources Limited is dedicated to providing fast, secure, and affordable truck rentals and moving services. We combine local expertise with high standards to ensure your items are handled with the highest level of professionalism and care.
             </p>
             
             <div className="space-y-8">
@@ -289,7 +289,7 @@ const Home = () => {
             </div>
             <div>
               <h3 className="text-3xl font-bold mb-2">Get a Quote</h3>
-              <p className="text-slate-500 group-hover:text-slate-300">Request a free estimate for your shipping.</p>
+              <p className="text-slate-500 group-hover:text-slate-300">Request a free estimate for your move.</p>
             </div>
           </Link>
         </div>
@@ -306,7 +306,7 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { name: 'Chidi Okafor', role: 'E-commerce Owner', text: 'Krenium Resources has transformed my business. Their nationwide delivery is incredibly reliable and my customers are always happy.' },
-              { name: 'Sarah Thompson', role: 'Import Manager', text: 'Shipping from the UK to Lagos used to be a headache until I found these guys. Professional, transparent, and fast.' },
+              { name: 'Sarah Thompson', role: 'Supply Chain Manager', text: 'Moving items from Abuja to Lagos used to be a headache until I found these guys. Professional, transparent, and fast.' },
               { name: 'Ahmed Musa', role: 'Business Executive', text: 'The tracking system is top-notch. I always know exactly where my corporate documents are. Highly recommended!' },
             ].map((t, i) => (
               <div key={i} className="bg-slate-50 p-8 rounded-2xl border border-slate-100 relative">
@@ -331,7 +331,7 @@ const Home = () => {
       <section className="py-20 px-4">
         <div className="max-w-5xl mx-auto bg-secondary rounded-3xl p-12 text-center text-white shadow-2xl relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 relative z-10">Ready to Start Shipping?</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 relative z-10">Ready to Start Moving?</h2>
           <p className="text-xl mb-10 opacity-90 relative z-10">Get a free quote today for your delivery.</p>
           <div className="flex flex-wrap justify-center gap-4 relative z-10">
             <Link to="/get-quote" className="bg-white text-secondary px-10 py-4 rounded-xl font-bold text-lg hover:bg-slate-100 transition-all shadow-lg">

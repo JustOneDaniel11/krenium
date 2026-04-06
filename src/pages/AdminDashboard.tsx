@@ -278,7 +278,7 @@ const AdminDashboard = () => {
       { key: 'site_name', text: 'Krenium', section: 'General', type: 'text', label: 'Site Name' },
       { key: 'contact_email', text: 'hello@krenium.com', section: 'General', type: 'text', label: 'Contact Email' },
       { key: 'contact_phone', text: '+234 800 000 0000', section: 'General', type: 'text', label: 'Contact Phone' },
-      { key: 'address', text: 'Lagos, Nigeria', section: 'General', type: 'text', label: 'Address' },
+      { key: 'address', text: '927/928, bishop aboyade cole street victoria island lagos state nigeria', section: 'General', type: 'text', label: 'Address' },
       { key: 'hero_bg', url: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80', alt: 'Logistics Warehouse', section: 'Home', type: 'image' },
       { key: 'about_story', url: 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80', alt: 'Our Story', section: 'About', type: 'image' },
       { key: 'founder_image', url: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80', alt: 'Founder', section: 'About', type: 'image' },
@@ -371,7 +371,7 @@ const AdminDashboard = () => {
             onClick={() => setActiveTab('quotes')}
             className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all ${activeTab === 'quotes' ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'text-slate-500 hover:bg-slate-50'}`}
           >
-            <Truck size={20} /> Shipping Quotes
+            <Truck size={20} /> Moving Quotes
             <span className="ml-auto bg-white/20 px-2 py-0.5 rounded-md text-xs">{quotes.length}</span>
           </button>
           <button 
@@ -416,7 +416,7 @@ const AdminDashboard = () => {
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
             <h1 className="text-3xl font-bold text-primary mb-2">
-              {activeTab === 'quotes' ? 'Shipping Quotes' : 
+              {activeTab === 'quotes' ? 'Moving Quotes' : 
                activeTab === 'enquiries' ? 'General Enquiries' :
                activeTab === 'content' ? 'Site Content Management' : 
                activeTab === 'settings' ? 'Site Settings' : 'Operations Slider'}
@@ -920,7 +920,7 @@ const AdminDashboard = () => {
               {/* Request Specific Info */}
               {activeTab === 'quotes' ? (
                 <div className="space-y-6">
-                  <h3 className="text-sm font-bold text-slate-700 uppercase tracking-widest border-b border-slate-100 pb-2">Shipping Details</h3>
+                  <h3 className="text-sm font-bold text-slate-700 uppercase tracking-widest border-b border-slate-100 pb-2">Moving Details</h3>
                   <div className="grid grid-cols-2 gap-6">
                     <div className="space-y-1">
                       <p className="text-xs text-slate-400 font-bold uppercase flex items-center gap-1"><MapPin size={12} /> Pickup</p>

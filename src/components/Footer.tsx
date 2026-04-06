@@ -9,7 +9,7 @@ const Footer = () => {
   const siteName = content['site_name']?.text || 'Krenium';
   const contactEmail = content['contact_email']?.text || 'info@kreniumresources.com';
   const contactPhone = content['contact_phone']?.text || '+234 800 LOGISTICS';
-  const address = content['address']?.text || '123 Logistics Plaza, Ikeja, Lagos, Nigeria';
+  const address = (content['address']?.text && content['address'].text !== 'Lagos, Nigeria') ? content['address'].text : '927/928, bishop aboyade cole street victoria island lagos state nigeria';
 
   return (
     <footer className="bg-primary text-white pt-16 pb-8">

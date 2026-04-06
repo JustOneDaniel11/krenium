@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { supabase } from '../lib/supabase';
-import { Mail, Phone, MapPin, Send, CheckCircle2, Clock, Globe, Truck, Loader2 } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle2, Clock, Map, Truck, Loader2 } from 'lucide-react';
 import SEO from '../components/SEO';
+import { useContent } from '../hooks/useContent';
 
 const Contact = () => {
+  const { content } = useContent('General');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -69,8 +71,7 @@ const Contact = () => {
               <div className="bg-primary/10 p-4 rounded-2xl text-primary"><Phone size={24} /></div>
               <div>
                 <h3 className="text-xl font-bold text-primary mb-2">Phone</h3>
-                <p className="text-slate-600 mb-1">+234 800 LOGISTICS</p>
-                <p className="text-slate-600">+234 123 456 7890</p>
+                <p className="text-slate-600 mb-1">{content.contact_phone?.text || '+234 800 000 0000'}</p>
               </div>
             </div>
 
@@ -78,8 +79,7 @@ const Contact = () => {
               <div className="bg-secondary/10 p-4 rounded-2xl text-secondary"><Mail size={24} /></div>
               <div>
                 <h3 className="text-xl font-bold text-primary mb-2">Email</h3>
-                <p className="text-slate-600 mb-1">info@kreniumresources.com</p>
-                <p className="text-slate-600">support@kreniumresources.com</p>
+                <p className="text-slate-600 mb-1">{content.contact_email?.text || 'hello@krenium.com'}</p>
               </div>
             </div>
 
@@ -87,7 +87,7 @@ const Contact = () => {
               <div className="bg-accent/10 p-4 rounded-2xl text-accent"><MapPin size={24} /></div>
               <div>
                 <h3 className="text-xl font-bold text-primary mb-2">Office</h3>
-                <p className="text-slate-600">123 Logistics Plaza, Ikeja, Lagos, Nigeria</p>
+                <p className="text-slate-600">{(content.address?.text && content.address.text !== 'Lagos, Nigeria') ? content.address.text : '927/928, bishop aboyade cole street victoria island lagos state nigeria'}</p>
               </div>
             </div>
 
@@ -211,9 +211,9 @@ const Contact = () => {
             <div className="absolute inset-0 flex items-center justify-center bg-slate-100">
               <div className="text-center p-8">
                 <MapPin size={64} className="text-secondary mx-auto mb-4 animate-bounce" />
-                <h4 className="text-2xl font-bold text-primary mb-2">Logistics Plaza, Ikeja</h4>
+                <h4 className="text-2xl font-bold text-primary mb-2">Head Office</h4>
                 <p className="text-slate-500 max-w-md mx-auto mb-4">
-                  Our main hub is located in the heart of Lagos, providing easy access to major transport routes.
+                  {(content.address?.text && content.address.text !== 'Lagos, Nigeria') ? content.address.text : '927/928, bishop aboyade cole street victoria island lagos state nigeria'}
                 </p>
                 <h4 className="text-xl font-bold text-primary mb-2">Operation Location</h4>
                 <p className="text-slate-500 max-w-md mx-auto">
@@ -221,7 +221,7 @@ const Contact = () => {
                 </p>
                 <div className="mt-8 flex justify-center gap-4">
                   <div className="bg-white px-6 py-3 rounded-xl shadow-md flex items-center gap-2 text-sm font-bold text-primary">
-                    <Globe size={18} className="text-secondary" /> Global Hub
+                    <Map size={18} className="text-secondary" /> National Hub
                   </div>
                   <div className="bg-white px-6 py-3 rounded-xl shadow-md flex items-center gap-2 text-sm font-bold text-primary">
                     <Truck size={18} className="text-secondary" /> 24/7 Dispatch
