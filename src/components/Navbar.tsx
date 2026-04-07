@@ -41,7 +41,14 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <Link to="/" className="flex items-center gap-2 group">
           {logo?.url ? (
-            <img src={logo.url} alt={logo.alt || "Logo"} className="h-10 w-auto object-contain scale-[2] origin-left" />
+            <img 
+              src={logo.url} 
+              alt={logo.alt || "Logo"} 
+              className={cn(
+                "h-10 w-auto object-contain scale-[4] origin-left transition-all duration-300",
+                isDarkText && "brightness-0"
+              )} 
+            />
           ) : (
             <span className={cn("font-bold text-xl", isDarkText ? "text-primary" : "text-white")}>{siteName}</span>
           )}
