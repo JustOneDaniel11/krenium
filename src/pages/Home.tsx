@@ -58,9 +58,6 @@ const Home = () => {
             transition={{ duration: 0.8 }}
             className="max-w-2xl text-white"
           >
-            <span className="inline-block bg-secondary px-4 py-1 rounded-full text-sm font-bold mb-6 uppercase tracking-wider">
-              Fast & Reliable Logistics
-            </span>
             <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
               Moving Your Home & Business <span className="text-blue-200">Across Nigeria</span>
             </h1>
