@@ -86,6 +86,12 @@ const Services = () => {
 
   return (
     <div className="pt-20">
+      <SEO 
+        title="Our Services | Krenium Logistics and Oil Resources Limited"
+        description="Professional logistics in Lagos, including truck rentals, corporate relocation, and haulage services."
+        canonicalUrl="https://www.kreniumresources.com/services"
+        schema={schema}
+      />
       {/* Header */}
       <section className="bg-primary py-24 px-4 text-white text-center">
         <div className="max-w-4xl mx-auto">

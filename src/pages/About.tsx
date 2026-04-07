@@ -28,7 +28,7 @@ const About = () => {
   return (
     <div className="pt-16">
       <SEO 
-        title="About Krenium Logistics and Oil Resources Limited | Trusted Logistics in Lagos"
+        title="About Us | Krenium Logistics and Oil Resources Limited"
         description="Learn about Krenium Logistics and Oil Resources Limited, your trusted partner for logistics in Lagos, truck rentals, and moving services."
         canonicalUrl="https://www.kreniumresources.com/about"
         schema={schema}
