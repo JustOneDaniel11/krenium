@@ -13,6 +13,7 @@ export default function SEO({ title, description, canonicalUrl, schema }: SEOPro
     <Helmet>
       <title>{title}</title>
       <meta name="description" content={description} />
+      <meta name="robots" content="index, follow" />
       
       {/* Open Graph / Facebook */}
       <meta property="og:type" content="website" />
