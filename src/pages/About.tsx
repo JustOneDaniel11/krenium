@@ -62,7 +62,7 @@ const About = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-xl md:text-2xl text-slate-200 max-w-3xl mx-auto font-light leading-relaxed"
           >
-            Your trusted partner in seamless logistics, driving efficiency and reliability across the Nigerian supply chain.
+            reliable moving services solutions and diesel sales delivery across nigeria
           </motion.p>
         </div>
       </section>
@@ -202,7 +202,7 @@ const About = () => {
             {[
               {
                 title: "Reliability",
-                desc: "We deliver on our promises, ensuring your cargo reaches its destination safely and on time.",
+                desc: "We deliver on our promises, ensuring your goods reaches its destination safely and on time.",
                 icon: <Shield className="w-8 h-8" />,
                 color: "bg-blue-50 text-blue-600"
               },

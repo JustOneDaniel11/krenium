@@ -29,17 +29,17 @@ const Services = () => {
     {
       id: 'relocation',
       title: 'Corporate & Residential Relocation',
-      desc: 'We handle seamless office (corporate) and private home moves with professionalism, ensuring your belongings are safely transported and delivered on time.',
+      desc: 'We handle seamless office (corporate) and private home moves with professionalism, ensuring your belongings are safely packed, transported and delivered on time.',
       icon: <Truck size={48} className="text-secondary" />,
-      features: ['Office relocation', 'Home moving', 'Professional packing', 'Safe transit'],
+      features: ['Office relocation', 'Home moving', 'Professional packing', 'Safe transit', 'Goods in transit insurance (GIT)'],
       img: content.service_relocation?.url
     },
     {
       id: 'diesel',
       title: 'Diesel Supply & Door-to-Door Delivery',
-      desc: 'We offer the sales and supply of diesel with prompt and secure doorstep delivery for businesses and individuals.',
+      desc: 'We offer the sales and supply of diesel with prompt and secure doorstep delivery for Cooperate and private.',
       icon: <Zap size={48} className="text-secondary" />,
-      features: ['Bulk supply', 'Doorstep delivery', 'Quality guaranteed', 'Business & Individual'],
+      features: ['Bulk supply', 'Doorstep delivery', 'Quality guaranteed', 'Cooperate & Private'],
       img: content.service_diesel?.url
     },
     {
@@ -47,7 +47,7 @@ const Services = () => {
       title: 'Haulage Services',
       desc: 'Our haulage solutions cover the transportation of goods in bulk, using well-maintained vehicles and experienced personnel.',
       icon: <Truck size={48} className="text-secondary" />,
-      features: ['Bulk transportation', 'Experienced drivers', 'Well-maintained fleet', 'Nationwide coverage'],
+      features: ['Bulk transportation', 'Experienced drivers', 'Well-maintained fleet', 'Nationwide coverage', 'Goods in transit insurance (GIT)', 'Proper detailed inventory of goods'],
       img: content.service_haulage?.url
     },
     {
@@ -65,14 +65,6 @@ const Services = () => {
       icon: <Truck size={48} className="text-secondary" />,
       features: ['Truck rental', 'Van rental', 'Flexible terms', 'Business operations'],
       img: content.service_rental?.url
-    },
-    {
-      id: 'dispatch',
-      title: 'Dispatch & Delivery Services',
-      desc: 'Fast and reliable dispatch services ensuring timely pickup and delivery of parcels and goods.',
-      icon: <Zap size={48} className="text-secondary" />,
-      features: ['Fast dispatch', 'Timely pickup', 'Reliable delivery', 'Parcel tracking'],
-      img: content.service_dispatch?.url
     },
     {
       id: 'consulting',
@@ -103,7 +95,7 @@ const Services = () => {
             Our Logistics Services
           </motion.h1>
           <p className="text-xl text-slate-300 leading-relaxed">
-            Comprehensive delivery and supply chain solutions tailored to your needs. Krenium Logistics and Oil Resources Limited provides the best logistics in Lagos, including affordable truck rentals and reliable moving services.
+            Comprehensive delivery in your coperate and domestic home move, tailored to your needs. Krenium Logistics and Oil Resources Limited provides the best logistics in Lagos, including affordable truck rentals and reliable moving services.
           </p>
         </div>
       </section>
