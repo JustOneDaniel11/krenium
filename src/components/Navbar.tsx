@@ -38,14 +38,14 @@ const Navbar = () => {
         scrolled || !isHome ? 'bg-white shadow-md' : 'bg-transparent'
       )}
     >
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <Link to="/" className="flex items-center gap-2 group">
+      <div className="max-w-7xl mx-auto flex items-center w-full relative">
+        <Link to="/" className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 flex items-center gap-2 group z-10">
           {logo?.url ? (
             <img 
               src={logo.url} 
               alt={logo.alt || "Logo"} 
               className={cn(
-                "h-10 w-auto object-contain scale-[4] origin-left transition-all duration-300",
+                "h-8 md:h-10 w-auto object-contain scale-[2.5] origin-center md:origin-left transition-all duration-300",
                 isDarkText && "brightness-0"
               )} 
             />
@@ -55,7 +55,7 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-8 ml-auto">
           {navLinks.map((link) => (
             <Link
               key={link.path}
@@ -73,7 +73,7 @@ const Navbar = () => {
 
         {/* Mobile Toggle */}
         <button
-          className="md:hidden p-2"
+          className="md:hidden p-2 ml-auto z-10 relative"
           onClick={() => setIsOpen(!isOpen)}
         >
           {isOpen ? (
