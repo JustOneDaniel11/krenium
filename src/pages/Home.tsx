@@ -132,8 +132,8 @@ const Home = () => {
             className="flex whitespace-nowrap gap-12 md:gap-20 transition-all duration-500 py-4"
           >
             {[
-              'UBA', 'Heritage Bank', 'Big Brother Naija', 'The Voice Nigeria', 'Goonite', 'Multichoice',
-              'UBA', 'Heritage Bank', 'Big Brother Naija', 'The Voice Nigeria', 'Goonite', 'Multichoice'
+              'UBA', 'Heritage Bank', 'Big Brother Naija', 'The Voice Nigeria', 'Goonite', 'Multichoice', 'Philandmove', 'Lightspeed Images', 'United Capitals',
+              'UBA', 'Heritage Bank', 'Big Brother Naija', 'The Voice Nigeria', 'Goonite', 'Multichoice', 'Philandmove', 'Lightspeed Images', 'United Capitals'
             ].map((brand, i) => (
               <div key={`${brand}-${i}`} className="text-2xl md:text-3xl font-black text-white/70 hover:text-white transition-colors cursor-default select-none px-4">
                 {brand}

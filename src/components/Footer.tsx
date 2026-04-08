@@ -40,13 +40,13 @@ const Footer = () => {
             Reliability, speed, and security in every delivery.
           </p>
           <div className="flex gap-4">
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="p-2 bg-white/10 rounded-full hover:bg-secondary transition-colors">
+            <a href="https://www.instagram.com/kreniumresources/" target="_blank" rel="noopener noreferrer" className="p-2 bg-white/10 rounded-full hover:bg-secondary transition-colors">
               <Instagram size={20} />
             </a>
-            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className="p-2 bg-white/10 rounded-full hover:bg-secondary transition-colors">
+            <a href="https://www.tiktok.com/@kreniumresources" target="_blank" rel="noopener noreferrer" className="p-2 bg-white/10 rounded-full hover:bg-secondary transition-colors">
               <TikTokIcon size={20} />
             </a>
-            <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="p-2 bg-white/10 rounded-full hover:bg-secondary transition-colors">
+            <a href="https://x.com/kreniumR" target="_blank" rel="noopener noreferrer" className="p-2 bg-white/10 rounded-full hover:bg-secondary transition-colors">
               <XIcon size={20} />
             </a>
           </div>
