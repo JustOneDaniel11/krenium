@@ -85,8 +85,9 @@ const Services = () => {
         schema={schema}
       />
       {/* Header */}
-      <section className="bg-primary py-24 px-4 text-white text-center">
-        <div className="max-w-4xl mx-auto">
+      <section className="bg-primary py-24 px-4 text-white text-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
+        <div className="max-w-4xl mx-auto relative z-10">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

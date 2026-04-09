@@ -56,8 +56,9 @@ const Contact = () => {
         canonicalUrl="https://www.kreniumresources.com/contact"
       />
       {/* Header */}
-      <section className="bg-primary py-20 px-4 text-white text-center">
-        <div className="max-w-4xl mx-auto">
+      <section className="bg-primary py-20 px-4 text-white text-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
+        <div className="max-w-4xl mx-auto relative z-10">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">Contact Us</h1>
           <p className="text-lg text-slate-300">We're here to help with all your logistics and delivery needs. Contact Krenium Logistics and Oil Resources Limited for reliable logistics in Lagos and truck rentals.</p>
         </div>
