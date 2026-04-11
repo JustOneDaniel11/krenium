@@ -17,19 +17,32 @@ const Home = () => {
   const relocationImg = serviceContent.service_relocation?.url;
   const haulageImg = serviceContent.service_haulage?.url;
 
-  const schema = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "Krenium Logistics and Oil Resources Limited",
-    "image": heroBg,
-    "description": "Krenium Logistics and Oil Resources Limited provides top-tier logistics in Lagos, affordable truck rentals, and reliable moving services.",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Lagos",
-      "addressCountry": "NG"
+  const schema = [
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Krenium Logistics and Oil Resources Limited",
+      "image": heroBg,
+      "description": "Krenium Logistics and Oil Resources Limited provides top-tier logistics in Lagos, affordable truck rentals, and reliable moving services.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Lagos",
+        "addressCountry": "NG"
+      },
+      "url": "https://www.kreniumresources.com"
     },
-    "url": "https://www.kreniumresources.com"
-  };
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Krenium Logistics and Oil Resources Limited",
+      "url": "https://www.kreniumresources.com/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.kreniumresources.com/{search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+  ];
 
   return (
     <div className="flex flex-col w-full">
