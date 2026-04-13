@@ -29,7 +29,7 @@ const Services = () => {
     {
       id: 'relocation',
       title: 'Corporate & Residential Relocation',
-      desc: 'We handle seamless office (corporate) and private home moves with professionalism, ensuring your belongings are safely packed, transported and delivered on time.',
+      desc: 'As a trusted moving company in Lagos Nigeria, we handle seamless office (corporate) and private home moves with professionalism, ensuring your belongings are safely packed, transported and delivered on time.',
       icon: <Truck size={48} className="text-secondary" />,
       features: ['Office relocation', 'Home moving', 'Professional packing', 'Safe transit', 'Goods in transit insurance (GIT)'],
       img: content.service_relocation?.url
@@ -79,8 +79,8 @@ const Services = () => {
   return (
     <div className="pt-20">
       <SEO 
-        title="Our Services | Krenium Logistics and Oil Resources Limited"
-        description="Professional logistics in Lagos, including truck rentals, corporate relocation, and haulage services."
+        title="Our Services | Top Moving Company in Lagos Nigeria"
+        description="Looking for a moving company in Lagos Nigeria? We offer professional logistics, truck rentals, corporate relocation, and haulage services."
         canonicalUrl="https://www.kreniumresources.com/services"
         schema={schema}
       />
@@ -96,7 +96,7 @@ const Services = () => {
             Our Logistics Services
           </motion.h1>
           <p className="text-xl text-slate-300 leading-relaxed">
-            Comprehensive delivery in your coperate and domestic home move, tailored to your needs. Krenium Logistics and Oil Resources Limited provides the best logistics in Lagos, including affordable truck rentals and reliable moving services.
+            Comprehensive delivery in your corporate and domestic home move, tailored to your needs. As a premier moving company in Lagos Nigeria, Krenium Logistics provides the best logistics, including affordable truck rentals and reliable moving services.
           </p>
         </div>
       </section>

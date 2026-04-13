@@ -47,8 +47,8 @@ const Home = () => {
   return (
     <div className="flex flex-col w-full">
       <SEO 
-        title="Krenium Logistics and Oil Resources Limited | Logistics in Lagos & Truck Rentals"
-        description="Krenium Logistics and Oil Resources Limited provides top-tier logistics in Lagos, affordable truck rentals, and reliable moving services."
+        title="Krenium Logistics | Top Moving Company in Lagos Nigeria & Truck Rentals"
+        description="Looking for a reliable moving company in Lagos Nigeria? Krenium Logistics provides top-tier relocation, affordable truck rentals, and secure haulage services."
         canonicalUrl="https://www.kreniumresources.com/"
         schema={schema}
       />
@@ -72,10 +72,10 @@ const Home = () => {
             className="max-w-2xl text-white"
           >
             <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
-              Moving Your Home & Business <span className="text-blue-200">Across Nigeria</span>
+              The Premier Moving Company in <span className="text-blue-200">Lagos Nigeria</span>
             </h1>
             <p className="text-xl text-slate-200 mb-10 leading-relaxed">
-              Fast and secure deliveries within Nigeria. We provide secure, efficient, and transparent logistics solutions for businesses and individuals such as cooperate and domestic house move, delivery of diesel, storage services and truck rentals and haulage.
+              Fast and secure deliveries within Nigeria. As a top moving company in Lagos Nigeria, we provide secure, efficient, and transparent logistics solutions for businesses and individuals such as corporate and domestic house moves, delivery of diesel, storage services, truck rentals, and haulage.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link to="/get-quote" className="bg-secondary hover:bg-slate-800 text-white px-10 py-4 rounded-lg font-bold text-lg transition-all shadow-xl">
@@ -170,8 +170,8 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {[
               {
-                title: 'Reliable Moving Services in Lagos',
-                desc: 'Seamless office and private home moves with professionalism and care. Trust Krenium for your relocation needs.',
+                title: 'Moving Company in Lagos Nigeria',
+                desc: 'Seamless office and private home moves with professionalism and care. Trust Krenium, the leading moving company in Lagos Nigeria, for your relocation needs.',
                 icon: <Truck size={40} className="text-secondary" />,
                 img: relocationImg
               },

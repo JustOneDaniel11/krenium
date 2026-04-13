@@ -28,8 +28,8 @@ const About = () => {
   return (
     <div className="pt-20">
       <SEO 
-        title="About Us | Krenium Logistics and Oil Resources Limited"
-        description="Learn about Krenium Logistics and Oil Resources Limited, your trusted partner for logistics in Lagos, truck rentals, and moving services."
+        title="About Us | Top Moving Company in Lagos Nigeria"
+        description="Learn about Krenium Logistics, your trusted moving company in Lagos Nigeria, providing reliable truck rentals, haulage, and corporate relocation services."
         canonicalUrl="https://www.kreniumresources.com/about"
         schema={schema}
       />
@@ -74,7 +74,7 @@ const About = () => {
                   A Reliable Logistics & Operations Powerhouse in Nigeria
                 </h3>
                 <p className="text-slate-600 text-lg leading-relaxed mb-8">
-                  Krenium Logistics and Oil Resources Limited is a premier logistics and operations company dedicated to providing world-class supply chain solutions. If you are looking for reliable logistics in Lagos or affordable truck rentals, we are your trusted partner. We pride ourselves on our unwavering commitment to <strong>efficiency</strong>, <strong>professionalism</strong>, and <strong>client satisfaction</strong>. With a robust <strong>nationwide network</strong>, we ensure that your goods, assets, and operations are managed with the highest level of precision and care.
+                  Krenium Logistics and Oil Resources Limited is a premier logistics and operations company dedicated to providing world-class supply chain solutions. If you are looking for a highly-rated moving company in Lagos Nigeria or affordable truck rentals, we are your trusted partner. We pride ourselves on our unwavering commitment to <strong>efficiency</strong>, <strong>professionalism</strong>, and <strong>client satisfaction</strong>. With a robust <strong>nationwide network</strong>, we ensure that your goods, assets, and operations are managed with the highest level of precision and care.
                 </p>
                 <div className="grid grid-cols-2 gap-6">
                   <div className="flex items-center gap-3">
