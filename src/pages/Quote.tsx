@@ -16,9 +16,11 @@ import {
   Shield,
   Loader2
 } from 'lucide-react';
+import { useContent } from '../hooks/useContent';
 import SEO from '../components/SEO';
 
 const Quote = () => {
+  const { content } = useContent('General');
   const [activeTab, setActiveTab] = useState<'quote' | 'enquiry'>('quote');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -70,8 +72,10 @@ const Quote = () => {
 
       if (error) throw error;
 
-      // WhatsApp Redirect for Quote
-      const phoneNumber = "2348166548652";
+      // WhatsApp Redirect for Quote using Brand Phone
+      const rawPhone = content.contact_phone?.text || "+2348166548652";
+      const phoneNumber = rawPhone.replace(/\D/g, ""); // Extract only numbers
+
       const whatsappMessage = `*New Quote Request*\n\n*Name:* ${quoteData.fullName}\n*Phone:* ${quoteData.phone}\n*Email:* ${quoteData.email}\n*Pickup:* ${quoteData.pickup}\n*Destination:* ${quoteData.destination}\n*Package Type:* ${quoteData.packageType}\n*Weight:* ${quoteData.weight}\n*Speed:* ${quoteData.speed}\n*Pickup Date:* ${quoteData.pickupDate}\n*Instructions:* ${quoteData.instructions}`;
       const encodedMessage = encodeURIComponent(whatsappMessage);
       window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
@@ -103,8 +107,10 @@ const Quote = () => {
 
       if (error) throw error;
 
-      // WhatsApp Redirect for Enquiry
-      const phoneNumber = "2348166548652";
+      // WhatsApp Redirect for Enquiry using Brand Phone
+      const rawPhone = content.contact_phone?.text || "+2348166548652";
+      const phoneNumber = rawPhone.replace(/\D/g, ""); // Extract only numbers
+
       const whatsappMessage = `*New General Enquiry*\n\n*Name:* ${enquiryData.fullName}\n*Email:* ${enquiryData.email}\n*Phone:* ${enquiryData.phone}\n*Subject:* ${enquiryData.subject}\n*Message:* ${enquiryData.message}`;
       const encodedMessage = encodeURIComponent(whatsappMessage);
       window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');

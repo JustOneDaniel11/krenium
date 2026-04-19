@@ -33,8 +33,10 @@ const Contact = () => {
 
       if (error) throw error;
       
-      // WhatsApp Redirect
-      const phoneNumber = "2348166548652";
+      // WhatsApp Redirect using Brand Phone
+      const rawPhone = content.contact_phone?.text || "+2348166548652";
+      const phoneNumber = rawPhone.replace(/\D/g, ""); // Extract only numbers
+      
       const whatsappMessage = `*New Contact Message*\n\n*Name:* ${formData.fullName}\n*Email:* ${formData.email}\n*Subject:* ${formData.subject}\n*Message:* ${formData.message}`;
       const encodedMessage = encodeURIComponent(whatsappMessage);
       window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
