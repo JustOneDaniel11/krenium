@@ -62,7 +62,7 @@ const Home = () => {
             className="w-full h-full object-cover object-[70%_center] md:object-center"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-primary/95 via-primary/80 md:via-primary/70 to-primary/20 md:to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-primary/60 via-primary/10 md:from-primary/80 md:via-primary/40 to-transparent"></div>
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 w-full">
