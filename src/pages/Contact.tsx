@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { supabase } from '../lib/supabase';
-import { Mail, Phone, MapPin, Send, CheckCircle2, Clock, Map, Truck, Loader2 } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle2, Clock, Map, Truck, Loader2, MessageCircle } from 'lucide-react';
 import SEO from '../components/SEO';
 import { useContent } from '../hooks/useContent';
 
@@ -9,6 +9,7 @@ const Contact = () => {
   const { content } = useContent('General');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [whatsappUrl, setWhatsappUrl] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -39,7 +40,9 @@ const Contact = () => {
       
       const whatsappMessage = `*New Contact Message*\n\n*Name:* ${formData.fullName}\n*Email:* ${formData.email}\n*Subject:* ${formData.subject}\n*Message:* ${formData.message}`;
       const encodedMessage = encodeURIComponent(whatsappMessage);
-      window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+      const waUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+      setWhatsappUrl(waUrl);
+      window.open(waUrl, '_blank');
       
       setSubmitted(true);
     } catch (err: any) {
@@ -126,13 +129,26 @@ const Contact = () => {
                     <CheckCircle2 size={48} />
                   </div>
                   <h2 className="text-3xl font-bold text-primary mb-4">Message Sent!</h2>
-                  <p className="text-slate-600 text-lg mb-8">Thank you for reaching out. Our team will get back to you shortly.</p>
-                  <button 
-                    onClick={() => setSubmitted(false)}
-                    className="text-secondary font-bold hover:underline"
-                  >
-                    Send another message
-                  </button>
+                  <p className="text-slate-600 text-lg mb-8">Please continue to WhatsApp to forward your message directly to our team.</p>
+                  
+                  <div className="flex flex-col items-center gap-6">
+                    {whatsappUrl && (
+                      <a 
+                        href={whatsappUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-[#25D366] text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-[#22bf5b] transition-all shadow-lg flex items-center gap-3"
+                      >
+                        <MessageCircle size={20} /> Open in WhatsApp
+                      </a>
+                    )}
+                    <button 
+                      onClick={() => { setSubmitted(false); setWhatsappUrl(null); }}
+                      className="text-slate-500 font-bold hover:underline"
+                    >
+                      Send another message
+                    </button>
+                  </div>
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-8">

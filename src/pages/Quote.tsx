@@ -25,18 +25,13 @@ const Quote = () => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [whatsappUrl, setWhatsappUrl] = useState<string | null>(null);
   
   // Form State for Moving Quote
   const [quoteData, setQuoteData] = useState({
     fullName: '',
     phone: '',
     email: '',
-    pickup: '',
-    destination: '',
-    packageType: 'Parcel',
-    weight: '',
-    speed: 'Standard',
-    pickupDate: '',
     instructions: ''
   });
 
@@ -59,12 +54,12 @@ const Quote = () => {
           full_name: quoteData.fullName,
           phone: quoteData.phone,
           email: quoteData.email,
-          pickup: quoteData.pickup,
-          destination: quoteData.destination,
-          package_type: quoteData.packageType,
-          weight: quoteData.weight,
-          speed: quoteData.speed,
-          pickup_date: quoteData.pickupDate,
+          pickup: 'N/A',
+          destination: 'N/A',
+          package_type: 'N/A',
+          weight: 'N/A',
+          speed: 'N/A',
+          pickup_date: null,
           instructions: quoteData.instructions,
           status: 'pending'
         }
@@ -76,9 +71,11 @@ const Quote = () => {
       const rawPhone = content.contact_phone?.text || "+2348166548652";
       const phoneNumber = rawPhone.replace(/\D/g, ""); // Extract only numbers
 
-      const whatsappMessage = `*New Quote Request*\n\n*Name:* ${quoteData.fullName}\n*Phone:* ${quoteData.phone}\n*Email:* ${quoteData.email}\n*Pickup:* ${quoteData.pickup}\n*Destination:* ${quoteData.destination}\n*Package Type:* ${quoteData.packageType}\n*Weight:* ${quoteData.weight}\n*Speed:* ${quoteData.speed}\n*Pickup Date:* ${quoteData.pickupDate}\n*Instructions:* ${quoteData.instructions}`;
+      const whatsappMessage = `*New Quote Request*\n\n*Name:* ${quoteData.fullName}\n*Phone:* ${quoteData.phone}\n*Email:* ${quoteData.email}\n*Details:* ${quoteData.instructions}`;
       const encodedMessage = encodeURIComponent(whatsappMessage);
-      window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+      const waUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+      setWhatsappUrl(waUrl);
+      window.open(waUrl, '_blank');
 
       setSubmitted(true);
     } catch (err: any) {
@@ -113,7 +110,9 @@ const Quote = () => {
 
       const whatsappMessage = `*New General Enquiry*\n\n*Name:* ${enquiryData.fullName}\n*Email:* ${enquiryData.email}\n*Phone:* ${enquiryData.phone}\n*Subject:* ${enquiryData.subject}\n*Message:* ${enquiryData.message}`;
       const encodedMessage = encodeURIComponent(whatsappMessage);
-      window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+      const waUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+      setWhatsappUrl(waUrl);
+      window.open(waUrl, '_blank');
 
       setSubmitted(true);
     } catch (err: any) {
@@ -199,14 +198,26 @@ const Quote = () => {
                 </div>
                 <h2 className="text-4xl font-bold text-primary mb-4">Request Submitted!</h2>
                 <p className="text-slate-600 text-xl mb-12 max-w-lg mx-auto">
-                  Thank you for reaching out. A Krenium Resources representative will contact you within 30 minutes.
+                  Thank you! Please click the button below to forward your details directly to our WhatsApp.
                 </p>
-                <button 
-                  onClick={() => setSubmitted(false)}
-                  className="bg-primary text-white px-10 py-4 rounded-2xl font-bold text-lg hover:bg-primary/90 transition-all"
-                >
-                  Back to Form
-                </button>
+                <div className="flex flex-col items-center gap-6">
+                  {whatsappUrl && (
+                    <a 
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-[#25D366] text-white px-10 py-4 rounded-2xl font-bold text-lg hover:bg-[#22bf5b] transition-all shadow-lg flex items-center gap-3"
+                    >
+                      <MessageCircle size={24} /> Continue to WhatsApp
+                    </a>
+                  )}
+                  <button 
+                    onClick={() => { setSubmitted(false); setWhatsappUrl(null); }}
+                    className="text-slate-500 hover:text-slate-700 font-bold hover:underline"
+                  >
+                    Send another request
+                  </button>
+                </div>
               </motion.div>
             ) : activeTab === 'quote' ? (
               <motion.div
@@ -253,127 +264,14 @@ const Quote = () => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="space-y-3">
-                      <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Pickup Location</label>
-                      <input 
-                        required 
-                        type="text" 
-                        value={quoteData.pickup}
-                        onChange={(e) => setQuoteData({...quoteData, pickup: e.target.value})}
-                        className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all" 
-                        placeholder="Address, City, State" 
-                      />
-                    </div>
-                    <div className="space-y-3">
-                      <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Delivery Destination</label>
-                      <input 
-                        required 
-                        type="text" 
-                        value={quoteData.destination}
-                        onChange={(e) => setQuoteData({...quoteData, destination: e.target.value})}
-                        className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all" 
-                        placeholder="City, State" 
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    <div className="space-y-3">
-                      <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Package Type</label>
-                      <select 
-                        value={quoteData.packageType}
-                        onChange={(e) => setQuoteData({...quoteData, packageType: e.target.value})}
-                        className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all"
-                      >
-                        <option>Document</option>
-                        <option>Parcel</option>
-                        <option>Cargo</option>
-                        <option>Fragile</option>
-                        <option>Other</option>
-                      </select>
-                    </div>
-                    <div className="space-y-3">
-                      <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Weight / Size</label>
-                      <input 
-                        required 
-                        type="text" 
-                        value={quoteData.weight}
-                        onChange={(e) => setQuoteData({...quoteData, weight: e.target.value})}
-                        className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all" 
-                        placeholder="e.g. 5kg" 
-                      />
-                    </div>
-                    <div className="space-y-3">
-                      <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Delivery Speed</label>
-                      <select 
-                        value={quoteData.speed}
-                        onChange={(e) => setQuoteData({...quoteData, speed: e.target.value})}
-                        className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all"
-                      >
-                        <option>Standard</option>
-                        <option>Express</option>
-                      </select>
-                    </div>
-                    <div className="space-y-3">
-                      <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Pickup Date</label>
-                      <input 
-                        required 
-                        type="date" 
-                        value={quoteData.pickupDate}
-                        onChange={(e) => setQuoteData({...quoteData, pickupDate: e.target.value})}
-                        className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all" 
-                      />
-                    </div>
-                  </div>
-
-                  {/* Dynamic Fields */}
-                  <AnimatePresence>
-                    {quoteData.packageType === 'Cargo' && (
-                      <motion.div 
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="grid grid-cols-1 md:grid-cols-2 gap-8 overflow-hidden"
-                      >
-                        <div className="space-y-3">
-                          <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Dimensions (L x W x H)</label>
-                          <input 
-                            type="text" 
-                            className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all" 
-                            placeholder="e.g. 100x50x50 cm" 
-                          />
-                        </div>
-                        <div className="space-y-3">
-                          <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Number of Items</label>
-                          <input 
-                            type="number" 
-                            className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all" 
-                            placeholder="1" 
-                          />
-                        </div>
-                      </motion.div>
-                    )}
-
-                    {quoteData.speed === 'Express' && (
-                      <motion.div 
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="bg-slate-100 border border-slate-200 p-4 rounded-2xl flex items-center gap-3 text-slate-800"
-                      >
-                        <AlertCircle size={20} />
-                        <span className="font-medium">Priority Handling: Your items will be processed with the highest priority for the fastest delivery.</span>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
                   <div className="space-y-3">
-                    <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Additional Instructions</label>
+                    <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Quote Details & Requirements</label>
                     <textarea 
+                      required
                       value={quoteData.instructions}
                       onChange={(e) => setQuoteData({...quoteData, instructions: e.target.value})}
-                      className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all h-32" 
-                      placeholder="Any special handling requirements?"
+                      className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all h-40" 
+                      placeholder="Please describe what you need moving, pickup/delivery areas, or any specific requirements..."
                     ></textarea>
                   </div>
 
