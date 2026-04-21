@@ -59,7 +59,7 @@ const Quote = () => {
           package_type: 'N/A',
           weight: 'N/A',
           speed: 'N/A',
-          pickup_date: null,
+          pickup_date: new Date().toISOString().split('T')[0],
           instructions: quoteData.instructions,
           status: 'pending'
         }
@@ -228,6 +228,12 @@ const Quote = () => {
                 className="p-8 md:p-12"
               >
                 <form onSubmit={handleQuoteSubmit} className="space-y-10">
+                  {error && (
+                    <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-xl flex items-start gap-3">
+                      <AlertCircle className="text-red-500 mt-0.5 flex-shrink-0" size={20} />
+                      <p className="text-red-700 font-medium">{error}</p>
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div className="space-y-3">
                       <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Full Name</label>
@@ -309,6 +315,12 @@ const Quote = () => {
                 className="p-8 md:p-12"
               >
                 <form onSubmit={handleEnquirySubmit} className="space-y-8">
+                  {error && (
+                    <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-xl flex items-start gap-3">
+                      <AlertCircle className="text-red-500 mt-0.5 flex-shrink-0" size={20} />
+                      <p className="text-red-700 font-medium">{error}</p>
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-3">
                       <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Full Name</label>

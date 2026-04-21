@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import OperationsSlider from '../components/OperationsSlider';
 import { useContent } from '../hooks/useContent';
 import SEO from '../components/SEO';
+import { reviews } from '../data/reviews';
 
 const Home = () => {
   const { content } = useContent('Home');
@@ -313,16 +314,12 @@ const Home = () => {
             <h3 className="text-4xl font-bold text-slate-900">What Our Clients Say</h3>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { name: 'Chidi Okafor', role: 'E-commerce Owner', text: 'Krenium Resources has transformed my business. Their nationwide delivery is incredibly reliable and my customers are always happy.' },
-              { name: 'Sarah Thompson', role: 'Supply Chain Manager', text: 'Moving items from Abuja to Lagos used to be a headache until I found these guys. Professional, transparent, and fast.' },
-              { name: 'Ahmed Musa', role: 'Business Executive', text: 'The tracking system is top-notch. I always know exactly where my corporate documents are. Highly recommended!' },
-            ].map((t, i) => (
-              <div key={i} className="bg-slate-50 p-8 rounded-2xl border border-slate-100 relative">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            {reviews.slice(0, 5).map((t, i) => (
+              <div key={i} className="bg-slate-50 p-8 rounded-2xl border border-slate-100 relative h-full flex flex-col">
                 <div className="text-secondary text-5xl font-serif absolute top-4 right-8 opacity-20">"</div>
-                <p className="text-slate-600 mb-8 italic leading-relaxed">"{t.text}"</p>
-                <div className="flex items-center gap-4">
+                <p className="text-slate-600 mb-8 italic leading-relaxed flex-grow">"{t.text}"</p>
+                <div className="flex items-center gap-4 mt-auto">
                   <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold">
                     {t.name.charAt(0)}
                   </div>
@@ -333,6 +330,12 @@ const Home = () => {
                 </div>
               </div>
             ))}
+          </div>
+          
+          <div className="text-center">
+            <Link to="/reviews" className="inline-flex items-center gap-2 bg-white border-2 border-primary text-primary px-8 py-3 rounded-xl font-bold hover:bg-primary hover:text-white transition-all shadow-sm">
+              See More Reviews <ArrowRight size={20} />
+            </Link>
           </div>
         </div>
       </section>

@@ -11,6 +11,7 @@ import Contact from './pages/Contact';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import Reviews from './pages/Reviews';
 
 // Scroll to top on route change
 const ScrollToTop = () => {
@@ -33,6 +34,7 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/services" element={<Services />} />
+              <Route path="/reviews" element={<Reviews />} />
               <Route path="/get-quote" element={<Quote />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/admin/login" element={<AdminLogin />} />
