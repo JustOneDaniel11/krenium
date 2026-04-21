@@ -54,32 +54,32 @@ const Home = () => {
         schema={schema}
       />
       {/* Hero Section */}
-      <section className="relative h-screen min-h-[600px] flex items-center overflow-hidden">
+      <section className="relative min-h-[100svh] md:h-screen md:min-h-[600px] flex items-center pt-28 pb-20 md:py-0 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img 
             src={heroBg} 
             alt="Krenium Logistics and Oil Resources Limited - Logistics in Lagos Background" 
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-[70%_center] md:object-center"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/70 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-primary/95 via-primary/80 md:via-primary/70 to-primary/20 md:to-transparent"></div>
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 w-full">
           <motion.div 
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 30, md: { x: -50, y: 0 } }}
+            animate={{ opacity: 1, y: 0, md: { x: 0, y: 0 } }}
             transition={{ duration: 0.8 }}
-            className="max-w-2xl text-white"
+            className="max-w-2xl text-white mt-10 md:mt-0"
           >
-            <h1 className="text-5xl md:text-7xl font-bold leading-tight mb-6">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold leading-tight mb-4 md:mb-6">
               The Premier Moving Company in <span className="text-blue-200">Lagos Nigeria</span>
             </h1>
-            <p className="text-xl text-slate-200 mb-10 leading-relaxed">
+            <p className="text-lg md:text-xl text-slate-200 mb-8 md:mb-10 leading-relaxed max-w-xl md:max-w-none">
               Fast and secure deliveries within Nigeria. As a top moving company in Lagos Nigeria, we provide secure, efficient, and transparent logistics solutions for businesses and individuals such as corporate and domestic house moves, delivery of diesel, storage services, truck rentals, and haulage.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/get-quote" className="bg-secondary hover:bg-slate-800 text-white px-10 py-4 rounded-lg font-bold text-lg transition-all shadow-xl">
+              <Link to="/get-quote" className="bg-secondary hover:bg-slate-800 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-xl w-full sm:w-auto text-center">
                 Get a Quote
               </Link>
             </div>
