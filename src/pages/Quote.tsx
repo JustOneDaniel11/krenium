@@ -32,6 +32,7 @@ const Quote = () => {
     fullName: '',
     phone: '',
     email: '',
+    serviceType: 'Corporate Relocation',
     instructions: ''
   });
 
@@ -54,6 +55,7 @@ const Quote = () => {
           full_name: quoteData.fullName,
           phone: quoteData.phone,
           email: quoteData.email,
+          service_type: quoteData.serviceType,
           pickup: 'N/A',
           destination: 'N/A',
           package_type: 'N/A',
@@ -71,7 +73,7 @@ const Quote = () => {
       const rawPhone = content.contact_phone?.text || "+2348166548652";
       const phoneNumber = rawPhone.replace(/\D/g, ""); // Extract only numbers
 
-      const whatsappMessage = `*New Quote Request*\n\n*Name:* ${quoteData.fullName}\n*Phone:* ${quoteData.phone}\n*Email:* ${quoteData.email}\n*Details:* ${quoteData.instructions}`;
+      const whatsappMessage = `*New Quote Request*\n\n*Name:* ${quoteData.fullName}\n*Phone:* ${quoteData.phone}\n*Email:* ${quoteData.email}\n*Service Type:* ${quoteData.serviceType}\n*Details:* ${quoteData.instructions}`;
       const encodedMessage = encodeURIComponent(whatsappMessage);
       const waUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
       setWhatsappUrl(waUrl);
@@ -234,7 +236,7 @@ const Quote = () => {
                       <p className="text-red-700 font-medium">{error}</p>
                     </div>
                   )}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-3">
                       <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Full Name</label>
                       <input 
@@ -267,6 +269,24 @@ const Quote = () => {
                         className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all" 
                         placeholder="email@example.com" 
                       />
+                    </div>
+                    <div className="space-y-3">
+                      <label className="text-sm font-bold text-slate-700 uppercase tracking-wider">Service Type</label>
+                      <select
+                        required
+                        value={quoteData.serviceType}
+                        onChange={(e) => setQuoteData({...quoteData, serviceType: e.target.value})}
+                        className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 focus:ring-2 focus:ring-secondary/20 focus:border-secondary transition-all"
+                      >
+                        <option>Corporate Relocation</option>
+                        <option>Residential Moving</option>
+                        <option>Diesel Supply / Moving</option>
+                        <option>Haulage Services</option>
+                        <option>Truck Rental</option>
+                        <option>Delivery & Dispatch</option>
+                        <option>Warehousing & Storage</option>
+                        <option>General Logistics Consulting</option>
+                      </select>
                     </div>
                   </div>
 
